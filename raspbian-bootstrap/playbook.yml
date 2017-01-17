@@ -1,11 +1,11 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: berry1
+- hosts: alarmdecoder 
   gather_facts: yes
   vars:
-    wifi:
-      ssid: "Cthulhu's Lair"
-      password: PASSWORD
+#    wifi:
+#      ssid: "{{ WIFISSID }}"
+#      password: "{{ WIFIPSK }}" 
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, cowsay, htop, ranger
@@ -26,9 +26,6 @@
 
     - name: add node repo
       command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
-      register: add
-      #changed_when:
-    - debug: var=add
 
     - name: install ubuntu packages
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
@@ -42,15 +39,13 @@
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
 
-    - name: install amazon iot device sdk
-      git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
+    #- name: install amazon iot device sdk
+    #  git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
       
   handlers:
     - name: reboot
       command: shutdown -r now "Ansible updates triggered"
-      #command: ls -lah ./ 
       async: 0
       poll: 0
       ignore_errors: true
-
 
