@@ -1,41 +1,49 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: alarmdecoder 
+- hosts: 192.168.0.150
   gather_facts: yes
   vars:
-#    wifi:
-#      ssid: "{{ WIFISSID }}"
-#      password: "{{ WIFIPSK }}" 
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
-        vim, cowsay, htop, ranger
+        vim, cowsay, htop, ranger, iftop
         ]
     pip_packages_to_install: [ awscli ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
   sudo: yes
   tasks:
-    - name: put wifi config in place
+    - name: TASK | Set /etc/hostname
+      template: src=templates/hostname.j2 dest=/etc/hostname
+      notify: reboot
+
+    - name: TASK | Update /etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts
+      notify: reboot
+
+    - name: TASK | Update network/interfaces config so wifi starts on boot
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+    
+    - name: TASK | Put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify: reboot
 
-    - name: install python-apt
+    - name: TASK | Install python-apt
       command: apt-get install python-apt
       register: aptget
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
 
-    - name: add node repo
+    - name: TASK | Add Adafruit repo
       command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
 
-    - name: install ubuntu packages
+    - name: TASK | Install ubuntu packages
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
   
-    - name: install python modules with pip
+    - name: TASK | Install python modules with pip
       pip: name={{ item }}
       with_items: pip_packages_to_install
    
-    - name: install node.js packages with npm
+    - name: TASK | Install node.js packages with npm
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
 
