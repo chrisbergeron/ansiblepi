@@ -10,6 +10,8 @@
     pip_packages_to_install: [ awscli ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     users_to_create: [ cbergeron ]
+    user: cbergeron
+    username: "Chris Bergeron"
     update_cache: no
   sudo: yes
   tasks:
@@ -34,7 +36,7 @@
     - name: TASK | Create user(s)
       # action: user name=cbergeron comment="Chris Bergeron" group=admin
       user:    
-        name: cbergeron
+        name: {{ user }}
         comment: "Chris Bergeron"
         shell: /bin/bash
         groups: pi
@@ -42,6 +44,9 @@
         # with_items: users_to_create
         # when: users_to_create is defined
 
+    - name: TASK | Copy .bashrc and .bash_logout files
+      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner="{{ user }}"
+      template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
 #    - name: TASK | Copy SSH key into authorized_keys
 #      authorized_key:
 #        user: cbergeron
@@ -55,6 +60,20 @@
     #- name: TASK | Add user(s) to sudoers
     #      user: cbergeron
     #      tag: addsudo
+
+    - name: TASK | Set MOTD
+      template: src=templates/motd.j2 dest=/etc/motd
+
+    - name: TASK | Create mount directory for Pi files
+      file:
+        path: /mnt/pi
+        state: directory
+        mode: 0755
+
+    - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
+      file:
+        template: src=templates/fstab.j2 dest=/etc/fstab
+        notify: reboot
 
     - name: TASK | Install python-apt
       command: apt-get install python-apt
@@ -85,4 +104,3 @@
       async: 0
       poll: 0
       ignore_errors: true
-
