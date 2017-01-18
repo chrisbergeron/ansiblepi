@@ -45,9 +45,8 @@
         # when: users_to_create is defined
 
     - name: TASK | Copy .bashrc and .bash_logout files
-      file:
-        template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner="{{ user }}"
-        template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
+      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner="{{ user }}"
+      template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
 #    - name: TASK | Copy SSH key into authorized_keys
 #      authorized_key:
 #        user: cbergeron
@@ -63,8 +62,7 @@
     #      tag: addsudo
 
     - name: TASK | Set MOTD
-      file:
-        template: src=templates/motd.j2 dest=/etc/motd
+      template: src=templates/motd.j2 dest=/etc/motd
 
     - name: TASK | Create mount directory for Pi files
       file:
