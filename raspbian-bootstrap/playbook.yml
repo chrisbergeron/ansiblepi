@@ -28,7 +28,7 @@
     
     - name: TASK | Put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
-        notify: reboot
+      notify: reboot
 
     - name: TASK | Change 'pi' default password
       user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
