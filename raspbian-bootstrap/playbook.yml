@@ -71,9 +71,8 @@
         mode: 0755
 
     - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
-      file:
-        template: src=templates/fstab.j2 dest=/etc/fstab
-        notify: reboot
+      template: src=templates/fstab.j2 dest=/etc/fstab
+      notify: reboot
 
     - name: TASK | Install python-apt
       command: apt-get install python-apt
