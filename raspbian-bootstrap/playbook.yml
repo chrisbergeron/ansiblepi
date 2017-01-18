@@ -17,18 +17,21 @@
   tasks:
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname
-      notify: reboot
+      notify:
+        - reboot
 
     - name: TASK | Update /etc/hosts
       template: src=templates/hosts.j2 dest=/etc/hosts
-      notify: reboot
+      notify:
+        - reboot
 
     - name: TASK | Update network/interfaces config so wifi starts on boot
       template: src=templates/interfaces.j2 dest=/etc/network/interfaces
     
     - name: TASK | Put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
-      notify: reboot
+      notify:
+        - reboot
 
     - name: TASK | Generate locale
       locale_gen: name=en_US.UTF-8 state=present
@@ -72,7 +75,8 @@
 
     - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
       template: src=templates/fstab.j2 dest=/etc/fstab
-      notify: reboot
+      notify:
+        - reboot
 
     - name: TASK | Install python-apt
       command: apt-get install python-apt
