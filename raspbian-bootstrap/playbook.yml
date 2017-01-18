@@ -107,6 +107,8 @@
       async: 0
       poll: 0
       ignore_errors: true
+
+    - name: reboot
       local_action:
         wait_for
         host={{ ansible_host }}
