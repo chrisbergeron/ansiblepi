@@ -48,8 +48,7 @@
       user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
 
     - name: TASK | Create user(s)
-      # action: user name=cbergeron comment="Chris Bergeron" group=admin
-      user:    
+      user:
         name: "{{ user }}"
         comment: "Chris Bergeron"
         shell: /bin/bash
@@ -61,19 +60,6 @@
     - name: TASK | Copy .bashrc and .bash_logout files
       template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner="{{ user }}"
       template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
-#    - name: TASK | Copy SSH key into authorized_keys
-#      authorized_key:
-#        user: cbergeron
-#        state: present
-#        #key: https://raw.githubusercontent.com/chrisbergeron/misc/master/cb_id_rsa.pub
-#        key: '{{ item }}'
-#      with_items: {{ ssh_keys }}  
-#"{{ lookup('file', '/home/{{ newuser }}/.ssh/id_rsa.pub
-#        path: /home/{{ users_to_create }}/.ssh/authorized_keys
-
-    #- name: TASK | Add user(s) to sudoers
-    #      user: cbergeron
-    #      tag: addsudo
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
@@ -112,13 +98,11 @@
     #  git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
       
   handlers:
-    - name: TASK | Rebooting if needed...
+    - name: reboot
       command: shutdown -r now
       async: 0
       poll: 0
       ignore_errors: true
-
-    - name: TASK | Waiting for reboot...
       local_action:
         wait_for
         host={{ ansible_host }}
