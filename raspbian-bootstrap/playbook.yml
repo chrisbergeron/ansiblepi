@@ -30,6 +30,20 @@
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify: reboot
 
+    - name: TASK | Generate locale
+      locale_gen: name=en_US.UTF-8 state=present
+
+    - name: Update Timezone to Etc/UTC
+      copy:
+        content="Etc/UTC\n"
+        dest=/etc/timezone
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+      notify:
+        - update timezone
+
     - name: TASK | Change 'pi' default password
       user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
 
@@ -98,8 +112,21 @@
     #  git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
       
   handlers:
-    - name: reboot
-      command: shutdown -r now "Ansible updates triggered"
+    - name: TASK | Rebooting if needed...
+      command: shutdown -r now
       async: 0
       poll: 0
       ignore_errors: true
+
+    - name: TASK | Waiting for reboot...
+      local_action:
+        wait_for
+        host={{ ansible_host }}
+        state=started
+        timeout=30
+
+    #- name: reboot
+    #  command: shutdown -r now "Ansible updates triggered"
+    #  async: 0
+    #  poll: 0
+    #  ignore_errors: true
