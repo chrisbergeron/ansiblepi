@@ -107,16 +107,4 @@
       async: 0
       poll: 0
       ignore_errors: true
-
-    - name: reboot
-      local_action:
-        wait_for
-        host={{ ansible_host }}
-        state=started
-        timeout=30
-
-    #- name: reboot
-    #  command: shutdown -r now "Ansible updates triggered"
-    #  async: 0
-    #  poll: 0
-    #  ignore_errors: true
+      register: restarted

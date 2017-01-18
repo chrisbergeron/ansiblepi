@@ -5,3 +5,13 @@
 if [ "$SHLVL" = 1 ]; then
     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
 fi
+
+# append to our global history file
+if mount | grep /mnt/pip > /dev/null; then
+    echo "Appending to masterhistory.txt...";
+    echo "************* START - `hostname` - `date` *************" >> /mnt/pi/masterhistory.txt
+    history >> /mnt/pi/masterhistory.txt
+    echo "************* END   - `hostname` - `date` *************" >> /mnt/pi/masterhistory.txt
+else
+    echo "No mount.  Didn't append to masterhistory.txt.";
+fi
