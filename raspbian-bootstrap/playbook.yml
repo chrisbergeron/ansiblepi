@@ -61,8 +61,12 @@
         # when: users_to_create is defined
 
     - name: TASK | Copy .bashrc and .bash_logout files
-      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner="{{ user }}"
+      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner={{ user }}
       template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
+
+    - name: TASK | Copy .bashrc and .bash_logout files
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner="pi"
+      template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
