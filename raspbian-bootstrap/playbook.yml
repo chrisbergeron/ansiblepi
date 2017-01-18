@@ -5,10 +5,11 @@
   vars:
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
-        vim, cowsay, htop, ranger, iftop
+        vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz
         ]
     pip_packages_to_install: [ awscli ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
+    users_to_create: [ cbergeron ]
     update_cache: no
   sudo: yes
   tasks:
@@ -26,6 +27,33 @@
     - name: TASK | Put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify: reboot
+
+    - name: TASK | Change 'pi' default password
+      user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
+
+    - name: TASK | Create user(s)
+      # action: user name=cbergeron comment="Chris Bergeron" group=admin
+      user:    
+        name: cbergeron
+        comment: "Chris Bergeron"
+        shell: /bin/bash
+        groups: pi
+        # with_items: users_to_create
+        # when: users_to_create is defined
+
+#    - name: TASK | Copy SSH key into authorized_keys
+#      authorized_key:
+#        user: cbergeron
+#        state: present
+#        #key: https://raw.githubusercontent.com/chrisbergeron/misc/master/cb_id_rsa.pub
+#        key: '{{ item }}'
+#      with_items: {{ ssh_keys }}  
+#"{{ lookup('file', '/home/{{ newuser }}/.ssh/id_rsa.pub
+#        path: /home/{{ users_to_create }}/.ssh/authorized_keys
+
+    #- name: TASK | Add user(s) to sudoers
+    #      user: cbergeron
+    #      tag: addsudo
 
     - name: TASK | Install python-apt
       command: apt-get install python-apt
