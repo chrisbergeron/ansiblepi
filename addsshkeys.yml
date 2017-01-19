@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: 192.168.0.150
-  gather_facts: yes
+- hosts: 192.168.0.146
+  gather_facts: no
   vars:
     #packages_to_install: [ git, automake, build-essential,
     #    ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
@@ -17,5 +17,3 @@
   sudo: yes
   roles:
     - ssh-keys
-
-  #tasks:
