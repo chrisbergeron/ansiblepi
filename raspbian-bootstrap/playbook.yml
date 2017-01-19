@@ -86,28 +86,33 @@
       command: apt-get install python-apt
       register: aptget
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
+      when: firstrun | match("true")
 
-    #- name: TASK | Add Adafruit repo
-    #  command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
-    #  command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
-      #tags: firstrun
+    - name: TASK | Add Adafruit repo (if extravar firstrun = true
+      command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
+      command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
+      when: firstrun | match("true")
 
-    #- name: TASK | If tag_firstrun do apt-get update
-    #  command: "sudo apt-get update"
-    #  tags: firstrun
+    - name: TASK | If tag_firstrun do apt-get update
+      command: "sudo apt-get update"
+      when: firstrun | match("true")
+
  #  command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
 
     - name: TASK | Install ubuntu packages
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
-  
+      when: firstrun | match("true")
+
     - name: TASK | Install python modules with pip
       pip: name={{ item }}
       with_items: pip_packages_to_install
-   
+      when: firstrun | match("true")
+
     - name: TASK | Install node.js packages with npm
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
+      when: firstrun | match("true")
 
     #- name: install amazon iot device sdk
     #  git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
