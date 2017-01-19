@@ -70,8 +70,6 @@
       template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
 
     - name: Provision ssh keys
-      hosts: all
-      sudo: true
       roles:
       - ssh-keys
 
