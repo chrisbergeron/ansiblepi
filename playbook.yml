@@ -55,8 +55,7 @@
       user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
 
     - name: TASK | Create user(s)
-      user:
-        name: "{{ item }}"
+      user: name={{ item.name }}
         comment: 'Chris Bergeron'
         shell: /bin/bash
         groups: pi
