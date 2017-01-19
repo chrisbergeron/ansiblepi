@@ -1,0 +1,129 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: 192.168.0.150
+  gather_facts: yes
+  vars:
+    packages_to_install: [ git, automake, build-essential, 
+        ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+        vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz
+        ]
+    pip_packages_to_install: [ awscli ]
+    npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
+    users_to_create: [ cbergeron ]
+    user: cbergeron
+    username: "Chris Bergeron"
+    update_cache: no
+    firstrun: "no"
+  sudo: yes
+  tasks:
+    - name: TASK | Set /etc/hostname
+      template: src=templates/hostname.j2 dest=/etc/hostname
+      notify:
+        - reboot
+
+    - name: TASK | Update /etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts
+      notify:
+        - reboot
+
+    - name: TASK | Update network/interfaces config so wifi starts on boot
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+    
+    - name: TASK | Put wifi config in place
+      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
+      notify:
+        - reboot
+
+    - name: TASK | Generate locale
+      locale_gen: name=en_US.UTF-8 state=present
+
+    - name: Update Timezone to Etc/UTC
+      copy:
+        content="Etc/UTC\n"
+        dest=/etc/timezone
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+      notify:
+        - update timezone
+
+    - name: TASK | Change 'pi' default password
+      user: name=pi update_password=always password="{{ PIPASSWORDNEW }}"
+
+    - name: TASK | Create user(s)
+      user:
+        name: "{{ user }}"
+        comment: "Chris Bergeron"
+        shell: /bin/bash
+        groups: pi
+        password: "{{ CBPASSWORDNEW }}"
+        # with_items: users_to_create
+        # when: users_to_create is defined
+
+    - name: TASK | Copy .bashrc and .bash_logout files for user {{ user }}
+      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner={{ user }}
+      template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
+
+    - name: TASK | Copy .bashrc and .bash_logout files for user pi
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner=pi
+      template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
+
+    - name: Provision ssh keys
+      hosts: all
+      sudo: true
+      roles:
+      - ssh-keys
+
+    - name: TASK | Set MOTD
+      template: src=templates/motd.j2 dest=/etc/motd
+
+    - name: TASK | Create mount directory for Pi files
+      file:
+        path: /mnt/pi
+        state: directory
+        mode: 0755
+
+    - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
+      template: src=templates/fstab.j2 dest=/etc/fstab
+      notify:
+        - reboot
+
+    - name: TASK | Install python-apt (-e firstrun ="true")
+      command: apt-get install python-apt
+      register: aptget
+      changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
+      when: firstrun | match("true")
+
+    - name: TASK | Add Adafruit repo (-e firstrun ="true")
+      # command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
+      # command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
+      command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
+      when: firstrun | match("true")
+
+    - name: TASK | Apt-get update (-e firstrun ="true")
+      command: "sudo apt-get update"
+      when: firstrun | match("true")
+
+    - name: TASK | Install ubuntu packages (-e firstrun ="true")
+      apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
+      with_items: packages_to_install
+      when: firstrun | match("true")
+
+    - name: TASK | Install python modules with pip (-e firstrun ="true")
+      pip: name={{ item }}
+      with_items: pip_packages_to_install
+      when: firstrun | match("true")
+
+    - name: TASK | Install node.js packages with npm (-e firstrun ="true")
+      npm: name={{ item }} global=yes
+      with_items: npm_packages_to_install
+      when: firstrun | match("true")
+
+  handlers:
+    - name: reboot
+      command: shutdown -r now
+      async: 0
+      poll: 0
+      ignore_errors: true
+      register: restarted
