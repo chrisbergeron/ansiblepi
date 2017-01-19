@@ -56,7 +56,7 @@
 
     - name: TASK | Create user(s)
       user:
-        name: "{{ item }}"
+        name={{ item }}
         comment: "Chris Bergeron"
         shell: /bin/bash
         groups: pi
