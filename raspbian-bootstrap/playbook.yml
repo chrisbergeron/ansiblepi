@@ -13,7 +13,7 @@
     user: cbergeron
     username: "Chris Bergeron"
     update_cache: no
-    firstrun: no
+    firstrun: "no"
   sudo: yes
   tasks:
     - name: TASK | Set /etc/hostname
