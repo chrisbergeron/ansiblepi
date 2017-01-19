@@ -9,7 +9,7 @@
         ]
     pip_packages_to_install: [ awscli ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
-    users_to_create: [ cbergeron ]
+    users: ['cbergeron','pi']
     user: cbergeron
     username: "Chris Bergeron"
     update_cache: no
@@ -56,13 +56,13 @@
 
     - name: TASK | Create user(s)
       user:
-        name: "{{ user }}"
+        name: "{{ item }}"
         comment: "Chris Bergeron"
         shell: /bin/bash
         groups: pi
         password: "{{ CBPASSWORDNEW }}"
-        # with_items: users_to_create
-        # when: users_to_create is defined
+        with_items: users
+        when: users_to_create is defined
 
     - name: TASK | Copy .bashrc and .bash_logout files for user {{ user }}
       template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner={{ user }}
