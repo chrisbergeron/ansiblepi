@@ -15,6 +15,9 @@
     update_cache: no
     firstrun: "no"
   sudo: yes
+  roles:
+    - ssh-keys
+
   tasks:
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname
@@ -68,10 +71,6 @@
     - name: TASK | Copy .bashrc and .bash_logout files for user pi
       template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner=pi
       template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
-
-    - name: Provision ssh keys
-      roles:
-      - ssh-keys
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
