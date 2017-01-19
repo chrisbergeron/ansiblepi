@@ -90,7 +90,11 @@
     - name: TASK | Add Adafruit repo
       command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
       command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
+      tags: firstrun
+      
+    - name: TASK | If tag_firstrun do apt-get update
       command: "sudo apt-get update"
+      tags: firstrun
 #      command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
 
     - name: TASK | Install ubuntu packages
