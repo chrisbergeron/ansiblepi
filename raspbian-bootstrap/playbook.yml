@@ -65,7 +65,7 @@
       template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
 
     - name: TASK | Copy .bashrc and .bash_logout files for user pi
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner="pi"
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner=pi
       template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
 
     - name: TASK | Set MOTD
@@ -88,7 +88,10 @@
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
 
     - name: TASK | Add Adafruit repo
-      command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
+      command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
+      command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
+      command: "sudo apt-get update"
+#      command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
 
     - name: TASK | Install ubuntu packages
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
