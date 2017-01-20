@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: 192.168.0.150
+- hosts: unassigned 
   gather_facts: yes
   vars:
     packages_to_install: [ git, automake, build-essential, 
@@ -10,13 +10,9 @@
     pip_packages_to_install: [ awscli ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     users: ['cbergeron','pi']
-    user: cbergeron
-    username: "Chris Bergeron"
+    username: cbergeron
     update_cache: no
-    firstrun: "no"
   sudo: yes
-  roles:
-    - ssh-keys
 
   tasks:
     - name: TASK | Set /etc/hostname
@@ -40,7 +36,15 @@
     - name: TASK | Generate locale
       locale_gen: name=en_US.UTF-8 state=present
 
-    - name: Update Timezone to Etc/UTC
+    - name: TASK | Set keyboard layout to US
+      template: src=templates/keyboard.j2 dest=/etc/default/keyboard
+      notify:
+        - reboot
+ 
+    #- name: TASK | Set CAPSLOCK to CTRL
+    #  command: setxkbmap -option ctrl:nocaps
+
+    - name: TASK | Update Timezone to Etc/UTC
       copy:
         content="Etc/UTC\n"
         dest=/etc/timezone
@@ -57,7 +61,7 @@
     - name: TASK | Create user(s)
       user:
         # name={{ item.name }}
-        name: {{ username }}
+        name: "{{ username }}"
         comment: 'Chris Bergeron'
         shell: /bin/bash
         groups: pi
@@ -65,12 +69,14 @@
         # with_items: users
         # when: users is defined
 
-    - name: TASK | Copy .bashrc and .bash_logout files for user {{ user }}
-      template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc owner={{ user }}
-      template: src=templates/bash_logout.j2 dest=/home/{{ user }}/.bash_logout
+    - name: TASK | Copy .bashrc and .bash_logout files for user {{ username }}
+      template: src=templates/bashrc.j2 dest=/home/{{ username }}/.bashrc owner={{ user }}
+      template: src=templates/bash_logout.j2 dest=/home/{{ username }}/.bash_logout
 
     - name: TASK | Copy .bashrc and .bash_logout files for user pi
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc owner=pi
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc2
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc3 owner="pi"
       template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
 
     - name: TASK | Set MOTD
@@ -103,7 +109,7 @@
       command: "sudo apt-get update"
       when: firstrun | match("true")
 
-    - name: TASK | Install ubuntu packages (-e firstrun ="true")
+    - name: TASK | Install packages (Vim, et al) (-e firstrun ="true")
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
       when: firstrun | match("true")
@@ -117,6 +123,10 @@
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
       when: firstrun | match("true")
+
+
+  roles:
+    - ssh-keys
 
   handlers:
     - name: reboot
