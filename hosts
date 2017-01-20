@@ -1,8 +1,8 @@
 [unassigned]
 #pi3-5 ansible_ssh_host=pi3e ansible_ssh_user=pi ansible_ssh_pass=cosine12 host_key_checking=false
-pizero1 ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
-pizero2 ansible_ssh_host=pizero2 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
-pizero3 ansible_ssh_host=pizero3 ansible_ssh_user=pi ansible_ssh_pass=cosine12 host_key_checking=false
+pizero1 ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero2 ansible_ssh_host=pizero2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero3 ansible_ssh_host=pizero3 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [raspbian:vars]
 authorized_ssh_users=['cbergeron','pi']

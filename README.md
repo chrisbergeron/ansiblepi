@@ -6,11 +6,14 @@ Via Pi console:
 - raspi-config
 	Boot options -> Console and disable splash screen
 	Advanced -> enable SSH
+- edit /etc/default/keyboard (Set keyboard to 'us')
+- reboot
 - edit wpa-supplicant.conf:
 	network={
 		ssid="SSID"
 		psk="PSK"
 	}
+- reboot
 
 Run playbook with '-e firstrun=true':
 
