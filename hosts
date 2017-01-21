@@ -4,9 +4,9 @@ pizero1 ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER
 pizero2 ansible_ssh_host=pizero2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pizero3 ansible_ssh_host=pizero3 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
-[raspbian:vars]
+[unassigned:vars]
 authorized_ssh_users=['cbergeron','pi']
 
 [assigned]
-alarmdecoder ansible_ssh_host=192.168.0.146 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_DEFAULT_PASS }}" host_key_checking=false
-retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_DEFAULT_PASS }}" host_key_checking=false
+alarmdecoder ansible_ssh_host=192.168.0.146 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false

@@ -1,7 +1,9 @@
 
 Prelaunch steps
 
-Via Pi console:
+Add MAC address to dhcp static leases.  Provide IP, hostname and description.
+
+On Pi console:
 - set user pi password
 - raspi-config
 	Boot options -> Console and disable splash screen
