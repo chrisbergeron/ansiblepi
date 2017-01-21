@@ -1,0 +1,11 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: checkmk
+  gather_facts: yes
+
+  vars:
+    update_cache: no
+
+  sudo: yes
+  roles:
+    - check_mk
