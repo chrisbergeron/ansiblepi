@@ -125,8 +125,8 @@
       when: firstrun | match("true")
 
 
-  roles:
-    - ssh-keys
+  #roles:
+  #  - ssh-keys
 
   handlers:
     - name: reboot
