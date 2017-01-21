@@ -124,10 +124,6 @@
       with_items: npm_packages_to_install
       when: firstrun | match("true")
 
-
-  #roles:
-  #  - ssh-keys
-
   handlers:
     - name: reboot
       command: shutdown -r now

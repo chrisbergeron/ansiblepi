@@ -1,3 +1,18 @@
 ---
-- name: Install CheckMK Agent
+- vars:
+    packages_to_install: [ xinetd, check-mk-agent ]
+  tasks:
+    - name: TASK | Download CheckMK Agent
+      apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
+      with_items: packages_to_install
+      when: firstrun | match("true")
 
+    - name: TASK | Copy CheckMK Agent config
+      template: src=templates/check_mk dest=/etc/xinetd.d/check_mk
+      notify: restart_xinetd
+
+  handlers:
+    - name: restart_xinetd
+      command: systemctl restart xinetd
+      async: 0
+      poll: 0
