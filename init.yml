@@ -5,7 +5,11 @@
   vars:
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+<<<<<<< HEAD
         vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz, screen
+=======
+        vim, htop, ranger, iftop, dnsutils, lrzsz
+>>>>>>> 32fc36845c0d5890aae460a543036d5649b82a90
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
@@ -74,10 +78,10 @@
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
 
     - name: TASK | Copy ssh/config for user cbergeron
-      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400
+      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
 
     - name: TASK | Copy ssh/config for user pi
-      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400
+      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=cbergeron
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
