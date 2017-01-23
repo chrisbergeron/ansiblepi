@@ -73,9 +73,13 @@
       template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
       tags: all
 
-    - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
-      template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc"
-      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
+#    - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
+#      template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc"
+#      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
+#      tags: all
+
+    - name: TASK | Copy .bash_logout and bashrc for user cbergeron
+      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc"
       tags: all
 
     - name: TASK | Copy .bash_logout and bashrc for user pi
