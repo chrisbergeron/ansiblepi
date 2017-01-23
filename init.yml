@@ -78,11 +78,8 @@
       template: src=templates/bash_logout.j2 dest=/home/{{ username }}/.bash_logout
       tags: all
 
-    - name: TASK | Copy .bashrc and .bash_logout files for user pi
+    - name: TASK | SECOND Copy .bashrc for user pi
       template: src=templates/bashrc.j2 dest=/home/pi/.bashrc
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc2
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc3
-      template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
       tags: all
 
     - name: TASK | Set MOTD
@@ -122,7 +119,7 @@
       command: "sudo apt-get upgrade"
       tags: firstrun
 
-    - name: TASK | Install packages (tag: firstrun)
+    - name: TASK | Install packages (tag firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
       tags: firstrun
