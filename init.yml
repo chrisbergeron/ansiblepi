@@ -73,6 +73,12 @@
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
 
+    - name: TASK | Copy ssh/config for user cbergeron
+      template: src="templates/ssh_config.jw" dest="/home/cbergeron/.ssh/config" mode=0400
+
+    - name: TASK | Copy ssh/config for user pi
+      template: src="templates/ssh_config.jw" dest="/home/cbergeron/.ssh/config" mode=0400
+
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
  
