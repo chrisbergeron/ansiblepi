@@ -80,6 +80,7 @@
 
     - name: TASK | Copy .bash_logout and bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc"
+      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
       tags: all
 
     - name: TASK | Copy .bash_logout and bashrc for user pi
