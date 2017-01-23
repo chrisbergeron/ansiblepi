@@ -9,6 +9,7 @@
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
+    username: cbergeron
   sudo: yes
 
   tasks:
