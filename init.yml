@@ -117,10 +117,10 @@
       with_items: npm_packages_to_install
       when: firstrun | match("true")
 
-    - name: Display all variables/facts known for a host
-      debug:
-        var: hostvars[inventory_hostname]
-        verbosity: 4
+    #- name: Display all variables/facts known for a host
+    #  debug:
+    #    var: hostvars[inventory_hostname]
+    #    verbosity: 4
 
   handlers:
     - name: reboot
