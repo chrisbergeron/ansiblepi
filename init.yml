@@ -83,7 +83,7 @@
         mode: 0755
 
     - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
-      template: src=templates/fstab.j2 dest=/etc/fstab
+      template: src=templates/fstab.j2 dest=/etc/fstab force=yes
       notify:
         - reboot
 
