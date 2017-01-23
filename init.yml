@@ -63,15 +63,12 @@
 
     - name: TASK | Create user(s)
       user:
-        # name={{ item.name }}
         name: "{{ username }}"
         comment: 'Chris Bergeron'
         shell: /bin/bash
         groups: pi
         password: "{{ CBPASSWORDNEW }}"
-        # with_items: users
-        # when: users is defined
-        tags: all
+      tags: all
 
     - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
       template: src=templates/bashrc.j2 dest=/home/{{ username }}/.bashrc owner={{ user }}
