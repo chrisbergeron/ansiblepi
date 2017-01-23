@@ -4,7 +4,7 @@ pi3-2 ansible_ssh_host=pi3-2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW 
 pi3-5 ansible_ssh_host=pi3-5 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [unassigned:vars]
-authorized_ssh_users=['cbergeron','pi']
+
 
 [assigned]
 alarmdecoder ansible_ssh_host=alarmdecoderwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false

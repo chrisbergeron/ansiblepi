@@ -4,6 +4,7 @@
   gather_facts: no
   vars:
     update_cache: no
+    authorized_ssh_users: ['cbergeron','pi']
   sudo: yes
   roles:
     - ssh-keys
