@@ -8,8 +8,6 @@
         vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
-    users: ['cbergeron','pi']
-    username: cbergeron
     update_cache: no
   sudo: yes
 
@@ -71,12 +69,13 @@
       tags: all
 
     - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
-      template: src=templates/bashrc.j2 dest=/home/{{ username }}/.bashrc owner={{ user }}
-      template: src=templates/bash_logout.j2 dest=/home/{{ username }}/.bash_logout
+      template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc"
+      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
       tags: all
 
-    - name: TASK | SECOND Copy .bashrc for user pi
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc
+    - name: TASK | Copy .bash_logout and bashrc for user pi
+      template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
+      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
       tags: all
 
     - name: TASK | Set MOTD
