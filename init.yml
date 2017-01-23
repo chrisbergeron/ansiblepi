@@ -113,7 +113,7 @@
       command: "sudo apt-get upgrade"
       when: firstrun | match("true")
 
-    - name: Packages to be installed:
+    - name: DEBUG | Packages to be installed
       debug:
         msg: "{{ packages_to_install }}"
 
