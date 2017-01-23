@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: no
+  vars:
+    #packages_to_install: [ git, automake, build-essential,
+    #    ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+    #    vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz
+    #    ]
+    #pip_packages_to_install: [ awscli ]
+    #npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
+    #users: ['cbergeron','pi']
+    #user: cbergeron
+    #username: "Chris Bergeron"
+    update_cache: no
+    #firstrun: "no"
+  sudo: yes
+  roles:
+    - ssh-keys

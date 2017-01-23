@@ -5,4 +5,4 @@ proc            /proc           proc    defaults          0       0
 # a swapfile is not a swap partition, no line here
 #   use  dphys-swapfile swap[on|off]  for that
 
-//192.168.0.103/Public/PI /mnt/pi cifs username=guest,password=,_netdev,uid=1000,gid=1000,iocharset=utf8, 0 0
+//192.168.0.103/Public/PI /mnt/pi cifs username=guest,password=,_netdev,uid=1000,gid=1000,iocharset=utf8,file_mode=0777,dir_mode=0777,noperm 0 0
