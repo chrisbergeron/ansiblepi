@@ -73,7 +73,7 @@
         # when: users is defined
         tags: all
 
-    - name: TASK | Copy .bashrc and .bash_logout files for user {{ username }}
+    - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
       template: src=templates/bashrc.j2 dest=/home/{{ username }}/.bashrc owner={{ user }}
       template: src=templates/bash_logout.j2 dest=/home/{{ username }}/.bash_logout
       tags: all
@@ -81,7 +81,7 @@
     - name: TASK | Copy .bashrc and .bash_logout files for user pi
       template: src=templates/bashrc.j2 dest=/home/pi/.bashrc
       template: src=templates/bashrc.j2 dest=/home/pi/.bashrc2
-      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc3 owner="pi"
+      template: src=templates/bashrc.j2 dest=/home/pi/.bashrc3
       template: src=templates/bash_logout.j2 dest=/home/pi/.bash_logout
       tags: all
 
@@ -102,32 +102,32 @@
         - reboot
       tags: all
 
-    - name: TASK | Install python-apt (-e firstrun ="true")
+    - name: TASK | Install python-apt (tag firstrun)
       command: apt-get install python-apt
       register: aptget
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
       tags: firstrun
 
-    - name: TASK | Add Adafruit repo (-e firstrun ="true")
+    - name: TASK | Add Adafruit repo (tag firstrun)
       # command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
       # command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
       command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
       tags: firstrun 
 
-    - name: TASK | Apt-get update (tag: firstrun)
+    - name: TASK | Apt-get update (tag firstrun)
       command: "sudo apt-get update"
       tags: firstrun
 
-    - name: TASK | Apt-get upgrade (tag: firstrun)
+    - name: TASK | Apt-get upgrade (tag firstrun)
       command: "sudo apt-get upgrade"
       tags: firstrun
 
-    - name: TASK | Install packages (Vim, et al) (tag: firstrun)
+    - name: TASK | Install packages (tag: firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
       tags: firstrun
 
-    - name: TASK | Install node.js packages with npm (tag: firstrun)
+    - name: TASK | Install node.js packages with npm (tag firstrun)
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
       tags: firstrun
