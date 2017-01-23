@@ -81,7 +81,7 @@
       template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
 
     - name: TASK | Copy ssh/config for user pi
-      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=cbergeron
+      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
