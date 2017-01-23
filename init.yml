@@ -70,8 +70,7 @@
       tags: all
 
     - name: TASK | Copy {{ username }} sudoers file
-      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd"
-      mode: 0440
+      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
       tags: all
 
     - name: TASK | Copy .bash_logout and .bash_logout files for user {{ username }}
