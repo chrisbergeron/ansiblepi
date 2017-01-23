@@ -74,10 +74,10 @@
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
 
     - name: TASK | Copy ssh/config for user cbergeron
-      template: src="templates/ssh_config.jw" dest="/home/cbergeron/.ssh/config" mode=0400
+      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400
 
     - name: TASK | Copy ssh/config for user pi
-      template: src="templates/ssh_config.jw" dest="/home/cbergeron/.ssh/config" mode=0400
+      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400
 
     - name: TASK | Set MOTD
       template: src=templates/motd.j2 dest=/etc/motd
@@ -113,9 +113,11 @@
       command: "sudo apt-get upgrade"
       when: firstrun | match("true")
 
-    - name: TASK | Install packages (firstrun)
+    - name: Packages to be installed:
       debug:
-        msg: "Package(s) to be installed: {{ packages_to_install }}"
+        msg: "{{ packages_to_install }}"
+
+    - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
       when: firstrun | match("true")
