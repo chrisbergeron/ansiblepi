@@ -1,5 +1,6 @@
 [unassigned]
-pi2-1 ansible_ssh_host=pi2-1wifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pi2-1wifi ansible_ssh_host=pi2-1wifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pi2-1 ansible_ssh_host=pi2-1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pi3-2 ansible_ssh_host=pi3-2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pi3-5 ansible_ssh_host=pi3-5 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 

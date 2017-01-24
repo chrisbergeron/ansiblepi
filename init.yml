@@ -5,11 +5,7 @@
   vars:
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
-<<<<<<< HEAD
-        vim, cowsay, htop, ranger, iftop, dnsutils, lrzsz, screen
-=======
-        vim, htop, ranger, iftop, dnsutils, lrzsz
->>>>>>> 32fc36845c0d5890aae460a543036d5649b82a90
+        vim, htop, ranger, iftop, dnsutils, lrzsz, jq
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
@@ -113,9 +109,10 @@
       command: "sudo apt-get update"
       when: firstrun | match("true")
 
-    - name: TASK | Apt-get upgrade (firstrun)
-      command: "sudo apt-get upgrade"
-      when: firstrun | match("true")
+# this seems to hang when doing itself (pi3-2)   
+# - name: TASK | Apt-get upgrade (firstrun)
+   #   command: "sudo apt-get upgrade"
+   #   when: firstrun | match("true")
 
     - name: DEBUG | Packages to be installed
       debug:
