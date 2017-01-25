@@ -2,13 +2,13 @@
 pi2-1wifi ansible_ssh_host=pi2-1wifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pi2-1 ansible_ssh_host=pi2-1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pi3-2 ansible_ssh_host=pi3-2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pi3-5 ansible_ssh_host=pi3-5 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [assigned]
 alarmdecoder ansible_ssh_host=alarmdecoderwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 plexserver ansible_ssh_host=plexserver ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+elkpi ansible_ssh_host=elkpi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [zeros]
 pizero1 ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
