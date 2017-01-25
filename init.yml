@@ -5,7 +5,7 @@
   vars:
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
-        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof
+        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof, tcpdump
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
@@ -53,6 +53,9 @@
         backup=yes
       notify:
         - update timezone
+
+# update /etc/services
+# logstash, consul, kibana, filebeat, checkmk, etc
 
     - name: TASK | Create user "{{ username }}"
       user:
