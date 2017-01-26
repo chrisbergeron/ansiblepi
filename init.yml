@@ -59,15 +59,6 @@
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
 
-    # remove accidental services.j2 file
-    - name: TASK | Remove accidental services.j2 file
-      file:
-        path: "/etc/services.j2"
-        state: absent
-
-    # update /etc/services
-    # logstash, consul, kibana, filebeat, checkmk, etc
-
     - name: TASK | Create user "{{ username }}"
       user:
         name: "{{ username }}"
