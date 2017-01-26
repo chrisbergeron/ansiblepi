@@ -62,7 +62,7 @@
     # remove accidental services.j2 file
     - name: TASK | remove services.j2 file
       file: "/etc/services.j2"
-        state: absent
+      state: absent
 
     # update /etc/services
     # logstash, consul, kibana, filebeat, checkmk, etc
