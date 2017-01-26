@@ -5,7 +5,8 @@
   vars:
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
-        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof, tcpdump
+        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
+        tcpdump, mlocate
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no

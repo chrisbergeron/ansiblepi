@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: yes
+  sudo: yes
+
+  tasks:
+    - name: TASK | Reboot
+      command: shutdown -r now
+      async: 0
+      poll: 0
+      ignore_errors: true
