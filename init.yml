@@ -82,7 +82,7 @@
       service:
         name: rsyslog
         state: restarted
-        when: firstrun | match("true")
+      when: firstrun | match("true")
 
     - name: TASK | Copy .bash_logout for user cbergeron
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
