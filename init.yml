@@ -67,8 +67,9 @@
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
       when: firstrun | match("true")
 
-    - name: TASK | unmask rsyslog.service
-      command: "sudo systemctl unmask rsyslog.service"
+    - name: TASK | Update rsyslog configuration
+      template: src="templates/rsyslog.j2" dest="/etc/rsyslog.conf" mode=0400 owner=pi
+      when: firstrun | match("true")
 
     - name: TASK | Restart rsyslog
       service:
@@ -148,8 +149,6 @@
     - name: TASK | remove syslog-ng
       apt: pkg=syslog-ng state=absent update_cache={{ update_cache }}
 
-
-
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
@@ -161,18 +160,8 @@
       poll: 0
       when: firstrun | match("true")
 
-    - name: TASK | Update rsyslog configuration
-      template: src="templates/rsyslog.j2" dest="/etc/rsyslog.conf" mode=0400 owner=pi
-      when: firstrun | match("true")
-
     - name: TASK | Install treesize in /usr/local/bin
       template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
-
-    - name: TASK | Restart syslog-ng
-      service:
-        name: syslog-ng
-        state: restarted
-      when: firstrun | match("true")
 
     - name: TASK | Install node.js packages with npm (firstrun)
       npm: name={{ item }} global=yes
