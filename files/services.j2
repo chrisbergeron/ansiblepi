@@ -1,3 +1,4 @@
+{{ ansible_managed }}
 # Network services, Internet style
 #
 # Note that it is presently the policy of IANA to assign a single well-known
@@ -364,6 +365,8 @@ radmin-port	4899/tcp			# RAdmin Port
 radmin-port	4899/udp
 logstash    5000/udp
 logstash    5000/tcp
+logstashsomething   5001/udp
+logstashsomething   5001/tcp
 rfe		5002/udp			# Radio Free Ethernet
 rfe		5002/tcp
 filebeatlogstash	5044/tcp
