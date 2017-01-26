@@ -70,15 +70,6 @@
     - name: TASK | Copy {{ username }} sudoers file
       template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
 
-    #- name: TASK | Insert sysloging for bash history
-    #  lineinfile:
-    #    path: "/home/cbergeron/.bashrc"
-    #    state: present
-    #    regexp: '^# enable'
-    #    insertafter: '^# enable programmable completion'
-    #    #line: "PROMPT_COMMAND='history -a >(tee -a ~/.bash_history | logger -t "$USER[$$] $SSH_CONNECTION")'"
-    #    line: '$PROMPT_COMMAND'
-
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
@@ -94,14 +85,14 @@
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
 
+    - name: TASK | Copy ssh/config for user cbergeron
+      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
+
     - name: TASK | Copy .bash_logout for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
 
     - name: TASK | Copy .bashrc for user pi
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
-
-    - name: TASK | Copy ssh/config for user cbergeron
-      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
 
     - name: TASK | Copy ssh/config for user pi
       template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
