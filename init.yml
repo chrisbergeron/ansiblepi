@@ -18,11 +18,13 @@
       template: src=templates/hostname.j2 dest=/etc/hostname
       notify:
         - reboot
+      when: firstrun | match("true")
 
     - name: TASK | Update /etc/hosts
       template: src=templates/hosts.j2 dest=/etc/hosts
       notify:
         - reboot
+      when: firstrun | match("true")
 
     - name: TASK | Update network/interfaces config so wifi starts on boot
       template: src=templates/interfaces.j2 dest=/etc/network/interfaces
@@ -31,6 +33,7 @@
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify:
         - reboot
+      when: firstrun | match("true")
 
     - name: TASK | Generate locale
       locale_gen: name=en_US.UTF-8 state=present
@@ -39,7 +42,8 @@
       template: src=templates/keyboard.j2 dest=/etc/default/keyboard
       notify:
         - reboot
- 
+      when: firstrun | match("true")
+
     #- name: TASK | Set CAPSLOCK to CTRL
     #  command: setxkbmap -option ctrl:nocaps
 
@@ -96,6 +100,7 @@
       template: src=templates/fstab.j2 dest=/etc/fstab
       notify:
         - reboot
+      when: firstrun | match("true")
 
     - name: TASK | Install python-apt (firstrun)
       command: apt-get install python-apt
