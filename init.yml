@@ -28,7 +28,8 @@
 
     - name: TASK | Update network/interfaces config so wifi starts on boot
       template: src=templates/interfaces.j2 dest=/etc/network/interfaces
-    
+      when: firstrun | match("true")
+
     - name: TASK | Put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify:
@@ -37,6 +38,7 @@
 
     - name: TASK | Generate locale
       locale_gen: name=en_US.UTF-8 state=present
+      when: firstrun | match("true")
 
     - name: TASK | Set keyboard layout to US
       template: src=templates/keyboard.j2 dest=/etc/default/keyboard
@@ -73,11 +75,13 @@
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
+      when: firstrun | match("true")
 
     - name: TASK | Restart rsyslog
       service:
         name: rsyslog
         state: restarted
+        when: firstrun | match("true")
 
     - name: TASK | Copy .bash_logout for user cbergeron
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
