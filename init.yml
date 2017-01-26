@@ -77,7 +77,6 @@
     - name: TASK | Insert sysloging for bash history
       lineinfile:
         path: "/home/cbergeron/.bashrc"
-        state: present
         regexp: "^ enable"
         insertafter: '^# enable programmable completion'
         line: "PROMPT_COMMAND='history -a >(tee -a ~/.bash_history | logger -t \"$USER[$$] $SSH_CONNECTION\")'"
