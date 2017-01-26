@@ -57,7 +57,16 @@
         backup=yes
 
     - name: TASK | Update /etc/services file
-      template: src=files/services.j2 dest=/etc/services.j2
+      template: src=files/services.j2 dest=/etc/services
+
+    # remove accidental services.j2 file
+    - stat: path="/etc/services.j2"
+      register: servicesyea
+
+    - name: TASK | remove services.j2 file
+      file: "/etc/services.j2"
+        state: absent
+        when: servicesyea.stat.exists
 
     # update /etc/services
     # logstash, consul, kibana, filebeat, checkmk, etc
