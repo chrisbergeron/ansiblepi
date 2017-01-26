@@ -74,6 +74,14 @@
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc"
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
 
+    - name: TASK | Insert sysloging for bash history
+      lineinfile:
+        path: /home/cbergeron/.bashrc
+        state: present
+        insertafter: '^# enable programmable completion'
+        line: "PROMPT_COMMAND='history -a >(tee -a ~/.bash_history | logger -t \"$USER[$$] $SSH_CONNECTION\")'"
+        line: '$PROMPT_COMMAND'
+
     - name: TASK | Copy .bash_logout and bashrc for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
