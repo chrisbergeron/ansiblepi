@@ -157,7 +157,7 @@
       when: firstrun | match("true")
 
     - name: TASK | Update rsyslog configuration
-      template: src="templates/rsyslog.j2" dest="/etc/rsyslog." mode=0400 owner=pi
+      template: src="templates/rsyslog.j2" dest="/etc/rsyslog.conf" mode=0400 owner=pi
       when: firstrun | match("true")
 
     - name: TASK | Install treesize in /usr/local/bin
