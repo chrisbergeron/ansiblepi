@@ -152,6 +152,9 @@
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
+
+    - name: TASK | Install treesize in /usr/local/bin
+      template: src="templates/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
       when: firstrun | match("true")
 
     - name: TASK | Start updatedb for locate (firstrun)
@@ -159,9 +162,6 @@
       async: 10
       poll: 0
       when: firstrun | match("true")
-
-    - name: TASK | Install treesize in /usr/local/bin
-      template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
 
     - name: TASK | Install node.js packages with npm (firstrun)
       npm: name={{ item }} global=yes
