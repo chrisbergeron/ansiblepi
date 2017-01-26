@@ -83,6 +83,10 @@
         #line: "PROMPT_COMMAND='history -a >(tee -a ~/.bash_history | logger -t "$USER[$$] $SSH_CONNECTION")'"
         line: '$PROMPT_COMMAND'
 
+      # Deletes the lines that reference xconsole
+    - name: TASK | Fix rsyslog bug
+      shell: "sudo sed -i '/# The named pipe \/dev\/xconsole/,$d' /etc/rsyslog.conf"
+
     - name: TASK | Copy .bash_logout and bashrc for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
