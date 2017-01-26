@@ -1,0 +1,28 @@
+{{ ansible_managed }}
+#!/bin/bash
+# NOTE: On OSX, "--max-depth=1" has to be changed to "-d 1"
+# Also, a good one-liner: sudo find . -printf '%s %p\n'| sort -nr | head -50
+
+if [ $# -eq 1 ] ; then
+  targ=$1
+else
+  targ="/"
+fi
+
+#linux = sudo du -k --max-depth=1 $targ | sort -nr | awk '
+#os x = sudo du -k -d 1 $targ | sort -nr | awk '
+
+sudo du -k -d 1 $targ | sort -nr | awk '
+     BEGIN {
+        split("KB,MB,GB,TB", Units, ",");
+     }
+     {
+        u = 1;
+        while ($1 >= 1024) {
+           $1 = $1 / 1024;
+           u += 1
+        }
+        $1 = sprintf("%.1f %s", $1, Units[u]);
+        print $0;
+     }
+    '
