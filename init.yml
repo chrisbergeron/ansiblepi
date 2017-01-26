@@ -115,10 +115,10 @@
       command: "sudo apt-get update"
       when: firstrun | match("true")
 
-# this seems to hang when doing itself (pi3-2)   
-# - name: TASK | Apt-get upgrade (firstrun)
-   #   command: "sudo apt-get upgrade"
-   #   when: firstrun | match("true")
+    # this seems to hang when doing itself (pi3-2)
+    # - name: TASK | Apt-get upgrade (firstrun)
+    #    command: "sudo apt-get upgrade"
+    #    when: firstrun | match("true")
 
     - name: DEBUG | Packages to be installed
       debug:
