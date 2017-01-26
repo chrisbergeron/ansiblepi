@@ -82,17 +82,21 @@
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
-    - service:
+
+    - name: TASK | Restart rsyslog
+      service:
         name: rsyslog
         state: restarted
 
     - name: TASK | Copy .bash_logout for user cbergeron
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
 
     - name: TASK | Copy .bash_logout for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
+
     - name: TASK | Copy .bashrc for user pi
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
 
@@ -138,9 +142,9 @@
     #    command: "sudo apt-get upgrade"
     #    when: firstrun | match("true")
 
-    - name: DEBUG | Packages to be installed
-      debug:
-        msg: "{{ packages_to_install }}"
+    #- name: DEBUG | Packages to be installed
+    #  debug:
+    #    msg: "{{ packages_to_install }}"
 
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
