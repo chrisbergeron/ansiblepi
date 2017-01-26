@@ -6,7 +6,7 @@
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, syslog-ng
+        tcpdump, mlocate
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
@@ -153,8 +153,8 @@
       poll: 0
       when: firstrun | match("true")
 
-    - name: TASK | Update syslog-ng configuration
-      template: src="templates/syslog-ng.j2" dest="/etc/syslog." mode=0400 owner=pi
+    - name: TASK | Update rsyslog configuration
+      template: src="templates/rsyslog.j2" dest="/etc/rsyslog." mode=0400 owner=pi
       when: firstrun | match("true")
 
     - name: TASK | Install treesize in /usr/local/bin
