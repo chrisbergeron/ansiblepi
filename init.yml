@@ -71,7 +71,7 @@
       template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
 
     - name: TASK | Copy .bash_logout and bashrc for user cbergeron
-      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc"
+      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
 
     - name: TASK | Insert sysloging for bash history
