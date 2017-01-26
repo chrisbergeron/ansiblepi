@@ -147,6 +147,12 @@
       with_items: packages_to_install
       when: firstrun | match("true")
 
+    - name: TASK | Start updatedb (firstrun)
+      shell: "(updatedb >/dev/null 2>&1 &)"
+      async: 10
+      poll: 0
+      when: firstrun | match("true")
+
     - name: TASK | Install node.js packages with npm (firstrun)
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
