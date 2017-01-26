@@ -86,6 +86,10 @@
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
+    - name: TASK | Restart syslog
+    - service:
+        name: rsyslog
+        state: restarted
 
     - name: TASK | Copy .bash_logout and bashrc for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
