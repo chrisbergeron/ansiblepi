@@ -70,10 +70,6 @@
     - name: TASK | Copy {{ username }} sudoers file
       template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
 
-    - name: TASK | Copy .bash_logout and bashrc for user cbergeron
-      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
-      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
-
     #- name: TASK | Insert sysloging for bash history
     #  lineinfile:
     #    path: "/home/cbergeron/.bashrc"
@@ -90,9 +86,15 @@
         name: rsyslog
         state: restarted
 
-    - name: TASK | Copy .bash_logout and bashrc for user pi
+    - name: TASK | Copy .bash_logout for user cbergeron
+      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+    - name: TASK | Copy .bashrc for user cbergeron
+      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
+
+    - name: TASK | Copy .bash_logout for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
-      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout"
+    - name: TASK | Copy .bashrc for user pi
+      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
 
     - name: TASK | Copy ssh/config for user cbergeron
       template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
