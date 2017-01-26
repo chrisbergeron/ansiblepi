@@ -54,8 +54,11 @@
       notify:
         - update timezone
 
-# update /etc/services
-# logstash, consul, kibana, filebeat, checkmk, etc
+    - name: TASK | Update /etc/services file
+
+
+    # update /etc/services
+    # logstash, consul, kibana, filebeat, checkmk, etc
 
     - name: TASK | Create user "{{ username }}"
       user:

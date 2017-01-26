@@ -1,4 +1,7 @@
 #!/usr/bin/env ansible-playbook
+
+# user must be created before this is run
+
 ---
 - hosts: all 
   gather_facts: no
