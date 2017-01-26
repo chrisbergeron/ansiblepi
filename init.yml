@@ -60,7 +60,6 @@
       template: src=files/services.j2 dest=/etc/services
 
     # remove accidental services.j2 file
-    - name: TASK | remove services.j2 file
     - file: "/etc/services.j2"
       state: absent
 
