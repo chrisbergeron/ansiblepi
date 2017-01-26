@@ -145,6 +145,9 @@
     - name: TASK | remove syslog-ng
       apt: pkg=syslog-ng state=absent update_cache={{ update_cache }}
 
+    - name: TASK | unmask rsyslog.service
+      command: "sudo systemctl unmask rsyslog.service"
+
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
