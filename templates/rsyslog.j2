@@ -18,6 +18,7 @@ $WorkDirectory /var/spool/rsyslog
 $IncludeConfig /etc/rsyslog.d/*.conf
 
 
+*.*	@@192.168.0.152:10514
 
 auth,authpriv.*			/var/log/auth.log
 *.*;auth,authpriv.none		-/var/log/syslog
@@ -44,3 +45,13 @@ news.notice			-/var/log/news/news.notice
 	mail,news.none		-/var/log/messages
 
 *.emerg				:omusrmsg:*
+
+$ModLoad imuxsock
+
+$ModLoad imklog
+
+# Provides UDP forwarding. The IP is the server's IP address
+*.* @192.168.0.152:514
+
+# Provides TCP forwarding. But the current server runs on UDP
+# *.* @@192.168.0.152:514
