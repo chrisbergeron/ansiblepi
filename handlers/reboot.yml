@@ -1,0 +1,8 @@
+#!/usr/bin/env ansible-playbook
+---
+  - name: reboot
+    command: shutdown -r now
+    async: 0
+    poll: 0
+    ignore_errors: true
+    register: restarted

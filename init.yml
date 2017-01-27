@@ -47,9 +47,6 @@
         - reboot
       when: firstrun | match("true")
 
-    #- name: TASK | Set CAPSLOCK to CTRL
-    #  command: setxkbmap -option ctrl:nocaps
-
     - name: TASK | Update Timezone to Etc/UTC
       copy:
         content="Etc/UTC\n"
@@ -127,24 +124,16 @@
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
       when: firstrun | match("true")
 
-    #- name: TASK | Add Adafruit repo (firstrun)
-      # command: "echo 'deb http://apt.adafruit.com/raspbian/ jessie main' | sudo tee --append /etc/apt/sources.list"
-      # command: "wget -O - -q https://apt.adafruit.com/apt.adafruit.com.gpg.key | sudo apt-key add -"
-    #  command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
-    #  when: firstrun | match("true")
-
     - name: TASK | Apt-get update (firstrun)
       command: "sudo apt-get update"
-      when: firstrun | match("true")
+      when:
+        - firstrun | match("true")
+        - ansible_ssh_host
 
     # this seems to hang when doing itself (pi3-2)
-    # - name: TASK | Apt-get upgrade (firstrun)
-    #    command: "sudo apt-get upgrade"
-    #    when: firstrun | match("true")
-
-    #- name: DEBUG | Packages to be installed
-    #  debug:
-    #    msg: "{{ packages_to_install }}"
+    - name: TASK | Apt-get upgrade (firstrun)
+      command: "sudo apt-get upgrade"
+      when: firstrun | match("true")
 
     - name: TASK | remove syslog-ng
       apt: pkg=syslog-ng state=absent update_cache={{ update_cache }}
@@ -167,16 +156,3 @@
       npm: name={{ item }} global=yes
       with_items: npm_packages_to_install
       when: firstrun | match("true")
-
-    #- name: Display all variables/facts known for a host
-    #  debug:
-    #    var: hostvars[inventory_hostname]
-    #    verbosity: 4
-
-  handlers:
-    - name: reboot
-      command: shutdown -r now
-      async: 0
-      poll: 0
-      ignore_errors: true
-      register: restarted
