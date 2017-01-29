@@ -136,7 +136,10 @@
       when: firstrun | match("true")
 
     - name: TASK | remove syslog-ng
-      apt: pkg=syslog-ng state=absent update_cache={{ update_cache }}
+      apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
+      apt: pkg=syslog-ng-core state=absent update_cache={{ update_cache }}
+      apt: pkg=syslog-ng-mod-sql state=absent update_cache={{ update_cache }}
+      apt: pkg=syslog-ng-mod-mongodb state=absent update_cache={{ update_cache }}
 
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
