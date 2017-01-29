@@ -116,7 +116,9 @@
       template: src=templates/fstab.j2 dest=/etc/fstab
       notify:
         - reboot
-      when: firstrun | match("true")
+      when:
+        - firstrun | match("true")
+        - ansible_ssh_host != 'pi3-2'
 
     - name: TASK | Install python-apt (firstrun)
       command: apt-get install python-apt
@@ -133,7 +135,9 @@
     # this seems to hang when doing itself (pi3-2)
     - name: TASK | Apt-get upgrade (firstrun)
       command: "sudo apt-get upgrade"
-      when: firstrun | match("true")
+      when:
+        - firstrun | match("true")
+        - ansible_ssh_host != 'pi3-2'
 
     - name: TASK | remove syslog-ng deps
       apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
