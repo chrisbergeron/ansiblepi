@@ -12,7 +12,7 @@
     update_cache: no
     username: cbergeron
     firstrun: "false"
-    runupgrade: "false"
+    sysupgrade: "false"
   sudo: yes
 
   tasks:
@@ -137,7 +137,7 @@
     - name: TASK | Apt-get upgrade (runupgrade)
       command: "sudo apt-get upgrade"
       when:
-        - upgrade | match("true")
+        - sysupgrade | match("true")
         - ansible_ssh_host != 'pi3-2'
 
 #    - name: TASK | remove syslog-ng deps
