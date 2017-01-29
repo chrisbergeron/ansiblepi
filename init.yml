@@ -132,18 +132,18 @@
         - firstrun | match("true")
         - ansible_ssh_host != 'pi3-2'
 
-    # this seems to hang when doing itself (pi3-2)
-    - name: TASK | Apt-get upgrade (firstrun)
+    # this seems to hang
+    - name: TASK | Apt-get upgrade (runupgrade)
       command: "sudo apt-get upgrade"
       when:
-        - firstrun | match("true")
+        - runupgrade | match("true")
         - ansible_ssh_host != 'pi3-2'
 
-    - name: TASK | remove syslog-ng deps
-      apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
-      apt: pkg=syslog-ng-core state=absent update_cache={{ update_cache }}
-      apt: pkg=syslog-ng-mod-sql state=absent update_cache={{ update_cache }}
-      apt: pkg=syslog-ng-mod-mongodb state=absent update_cache={{ update_cache }}
+#    - name: TASK | remove syslog-ng deps
+#      apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
+#      apt: pkg=syslog-ng-core state=absent update_cache={{ update_cache }}
+#      apt: pkg=syslog-ng-mod-sql state=absent update_cache={{ update_cache }}
+#      apt: pkg=syslog-ng-mod-mongodb state=absent update_cache={{ update_cache }}
 
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
