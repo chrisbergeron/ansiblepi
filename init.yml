@@ -129,6 +129,8 @@
 
     - name: TASK | Apt-get update (firstrun)
       command: "sudo apt-get update"
+      async: 120
+      poll: 0
       when:
         - firstrun | match("true")
         - ansible_ssh_host != 'pi3-2'
