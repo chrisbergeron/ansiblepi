@@ -156,7 +156,7 @@
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "(updatedb >/dev/null 2>&1 &)"
-      async: 10
+      async: 60
       poll: 0
       when: firstrun | match("true")
 
