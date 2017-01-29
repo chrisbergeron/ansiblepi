@@ -119,7 +119,7 @@
         - reboot
       when:
         - firstrun | match("true")
-        - ansible_ssh_host != 'pi3-2'
+        - ansible_ssh_host != 'gpserver'
 
     - name: TASK | Install python-apt (firstrun)
       command: apt-get install python-apt
@@ -133,14 +133,14 @@
       #poll: 0
       when:
         - firstrun | match("true")
-        - ansible_ssh_host != 'pi3-2'
+        - ansible_ssh_host != 'gpserver'
 
     # this seems to hang
     - name: TASK | Apt-get upgrade (runupgrade)
       command: "sudo apt-get upgrade"
       when:
         - sysupgrade | match("true")
-        - ansible_ssh_host != 'pi3-2'
+        - ansible_ssh_host != 'gpserver'
 
 #    - name: TASK | remove syslog-ng deps
 #      apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
