@@ -135,7 +135,7 @@
       command: "sudo apt-get upgrade"
       when: firstrun | match("true")
 
-    - name: TASK | remove syslog-ng
+    - name: TASK | remove syslog-ng deps
       apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
       apt: pkg=syslog-ng-core state=absent update_cache={{ update_cache }}
       apt: pkg=syslog-ng-mod-sql state=absent update_cache={{ update_cache }}
