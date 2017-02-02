@@ -119,4 +119,7 @@ fi
 PROMPT_COMMAND='history -a >(tee -a ~/.bash_history | logger -t "$USER[$$] $SSH_CONNECTION")'
 $PROMPT_COMMAND
 
+export GREP_OPTIONS='--color=always'
+export GREP_COLOR='0;32;40'
+
 # {{ ansible_managed }}
