@@ -28,11 +28,6 @@
         - reboot
       when: firstrun | match("true")
 
-#    - name: TASK | Set MOTD
-#      template: src=templates/motd.j2 dest=/etc/motd
-    - name: TASK | Set MOTD
-      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
-
     - name: TASK | Update network/interfaces config so wifi starts on boot
       template: src=templates/interfaces.j2 dest=/etc/network/interfaces
       when: firstrun | match("true")
@@ -153,6 +148,14 @@
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
+
+#    - name: TASK | Set MOTD
+#      template: src=templates/motd.j2 dest=/etc/motd
+
+#   set MOTD AFTER toilet has been installed
+    - name: TASK | Set MOTD
+      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+
 
     - name: TASK | Install treesize in /usr/local/bin
       template: src="templates/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
