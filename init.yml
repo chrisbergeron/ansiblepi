@@ -161,6 +161,8 @@
 
     - name: TASK | Install prowl API key
       template: src="files/prowl.pl" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
+
+    - name: USAGE | Invoking prowlnotify
       debug: msg='prowlnotify -apikeyfile=prowl_key.txt -event="Test" -notification="Hello from RasPi"'
 
     - name: TASK | Install treesize in /usr/local/bin
