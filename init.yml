@@ -6,7 +6,7 @@
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog
+        tcpdump, mlocate, rsyslog, toilet
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
@@ -27,6 +27,11 @@
       notify:
         - reboot
       when: firstrun | match("true")
+
+#    - name: TASK | Set MOTD
+#      template: src=templates/motd.j2 dest=/etc/motd
+    - name: TASK | Set MOTD
+      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
 
     - name: TASK | Update network/interfaces config so wifi starts on boot
       template: src=templates/interfaces.j2 dest=/etc/network/interfaces
@@ -104,9 +109,6 @@
     - name: TASK | Copy ssh/config for user pi
       template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
 
-    - name: TASK | Set MOTD
-      template: src=templates/motd.j2 dest=/etc/motd
- 
     - name: TASK | Create mount directory for Pi files
       file:
         path: /mnt/pi
