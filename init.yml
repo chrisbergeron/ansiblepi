@@ -126,8 +126,8 @@
 
     - name: TASK | Apt-get update (firstrun)
       command: "sudo apt-get update"
-      #async: 120
-      #poll: 0
+      # async: 120
+      # poll: 0
       when:
         - firstrun | match("true")
         - ansible_ssh_host != 'gpserver'
@@ -139,20 +139,11 @@
         - sysupgrade | match("true")
         - ansible_ssh_host != 'gpserver'
 
-#    - name: TASK | remove syslog-ng deps
-#      apt: pkg=syslog-ng-mod-json state=absent update_cache={{ update_cache }}
-#      apt: pkg=syslog-ng-core state=absent update_cache={{ update_cache }}
-#      apt: pkg=syslog-ng-mod-sql state=absent update_cache={{ update_cache }}
-#      apt: pkg=syslog-ng-mod-mongodb state=absent update_cache={{ update_cache }}
-
     - name: TASK | Install packages (firstrun)
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
 
-#    - name: TASK | Set MOTD
-#      template: src=templates/motd.j2 dest=/etc/motd
-
-#   set MOTD AFTER toilet has been installed
+    # set MOTD AFTER toilet has been installed
     - name: TASK | Set MOTD
       shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
 
@@ -171,8 +162,8 @@
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "(updatedb >/dev/null 2>&1 &)"
-      async: 60
-      poll: 0
+      # async: 60
+      # poll: 0
       when: firstrun | match("true")
 
     - name: TASK | Install node.js packages with npm (firstrun)
@@ -183,7 +174,7 @@
   handlers:
     - name: reboot
       command: shutdown -r now
-      async: 0
-      poll: 0
+      # async: 0
+      # poll: 0
       ignore_errors: true
       register: restarted
