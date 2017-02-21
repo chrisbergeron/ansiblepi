@@ -2,23 +2,16 @@
 - hosts: all
   gather_facts: yes
   vars:
-    update_cache: no
+    reboot: "false"
   sudo: yes
 
   tasks:
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
-      notify:
-        - reboot
 
     - name: TASK | Update /etc/hosts
       template: src=templates/hosts.j2 dest=/etc/hosts force=yes
-      notify:
-        - reboot
 
-  handlers:
-    - name: reboot
-      command: shutdown -r now
-      async: 0
-      poll: 0
-      ignore_errors: true
+    - name: TASK | Reboot nodes (reboot=true)
+      command: /sbin/reboot
+      when: reboot | match("true")

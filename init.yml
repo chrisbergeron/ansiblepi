@@ -23,7 +23,7 @@
       when: firstrun | match("true")
 
     - name: TASK | Update /etc/hosts
-      template: src=templates/hosts.j2 dest=/etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
       notify:
         - reboot
       when: firstrun | match("true")
@@ -147,14 +147,14 @@
     - name: TASK | Set MOTD
       shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
 
-    - name: TASK | Install prowl / growlnotify
+    - name: TASK | Install prowl API key
       template: src="files/prowl_key.txt" dest="/home/cbergeron/prowl_key.txt" mode=0600 owner=cbergeron
 
-    - name: TASK | Install prowl API key
-      template: src="files/prowl.pl" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
-
-    - name: USAGE | Invoking prowlnotify
-      debug: msg='prowlnotify -apikeyfile=prowl_key.txt -event="Test" -notification="Hello from RasPi"'
+    - name: TASK | Install prowl
+      template: src="files/prowl.pl" dest="/usr/local/bin/prowl.pl" mode=0755 owner=cbergeron
+	
+    - name: TASK | Install prowlnotify
+      template: src="files/prowlnotify.sh" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
 
     - name: TASK | Install treesize in /usr/local/bin
       template: src="templates/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
