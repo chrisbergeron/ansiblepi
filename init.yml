@@ -92,6 +92,12 @@
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
 
+    - name: TASK | Create ssh config directory for user cbergeron
+      file:
+        path: /home/cbergeron/.ssh
+        state: directory
+        mode: 0700
+
     - name: TASK | Copy ssh/config for user cbergeron
       template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
 
@@ -152,7 +158,7 @@
 
     - name: TASK | Install prowl
       template: src="files/prowl.pl" dest="/usr/local/bin/prowl.pl" mode=0755 owner=cbergeron
-	
+
     - name: TASK | Install prowlnotify
       template: src="files/prowlnotify.sh" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
 
