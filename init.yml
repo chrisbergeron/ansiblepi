@@ -6,7 +6,7 @@
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog, toilet, libwww-perl, watchdog, nload
+        tcpdump, mlocate, rsyslog, toilet, libwww-perl, watchdog, nload, software-properties-common
         ]
     npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
