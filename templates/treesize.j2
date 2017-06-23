@@ -1,4 +1,3 @@
-{{ ansible_managed }}
 #!/bin/bash
 # NOTE: On OSX, "--max-depth=1" has to be changed to "-d 1"
 # Also, a good one-liner: sudo find . -printf '%s %p\n'| sort -nr | head -50
@@ -26,3 +25,4 @@ sudo du -k -d 1 $targ | sort -nr | awk '
         print $0;
      }
     '
+{{ ansible_managed }}
