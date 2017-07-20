@@ -12,6 +12,10 @@
     - name: TASK | Update /etc/hosts
       template: src=templates/hosts.j2 dest=/etc/hosts force=yes
 
+    # set MOTD
+    - name: TASK | Set MOTD
+      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+
     - name: TASK | Reboot nodes (reboot=true)
       command: /sbin/reboot
       when: reboot | match("true")
