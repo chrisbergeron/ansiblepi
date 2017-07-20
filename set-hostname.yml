@@ -14,7 +14,7 @@
 
     # set MOTD
     - name: TASK | Set MOTD
-      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+      shell: "(/usr/bin/toilet -w 120 -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
 
     - name: TASK | Reboot nodes (reboot=true)
       command: /sbin/reboot
