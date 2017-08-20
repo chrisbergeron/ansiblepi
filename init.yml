@@ -101,6 +101,9 @@
     - name: TASK | Copy ssh/config for user cbergeron
       template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
 
+    - name: TASK | Copy ssh keys for user cbergeron
+      template: src="templates/authorized_keys.j2" dest="/home/cbergeron/.ssh/authorized_keys" mode=0600 owner=cbergeron
+
     - name: TASK | Copy .bash_logout for user pi
       template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
 
@@ -163,7 +166,7 @@
       template: src="files/prowlnotify.sh" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
 
     - name: TASK | Install treesize in /usr/local/bin
-      template: src="templates/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
+      template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
       when: firstrun | match("true")
 
     - name: TASK | Start updatedb for locate (firstrun)
