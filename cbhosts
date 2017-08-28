@@ -1,0 +1,25 @@
+[unassigned]
+pi2-1 ansible_ssh_host=pi2-1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pi3-7 ansible_ssh_host=pi3-7 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+
+[assigned]
+#alarmdecoder ansible_ssh_host=alarmdecoderwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+plexserver ansible_ssh_host=plexserver ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+elkpi ansible_ssh_host=elkpi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pi3-5wifi ansible_ssh_host=pi3-5wifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+gpserver ansible_ssh_host=gpserver ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+
+[zeros]
+pizero1 ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero2 ansible_ssh_host=pizero2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero3 ansible_ssh_host=pizero3 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero4 ansible_ssh_host=pizero4 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero5 ansible_ssh_host=pizero5 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero6 ansible_ssh_host=pizero6 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero7 ansible_ssh_host=pizero7 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero8 ansible_ssh_host=pizero8 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero9 ansible_ssh_host=pizero9 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero10 ansible_ssh_host=pizero10 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero11 ansible_ssh_host=pizero11 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false

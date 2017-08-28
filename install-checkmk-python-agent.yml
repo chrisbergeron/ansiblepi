@@ -1,0 +1,17 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: yes
+
+  vars:
+    update_cache: no
+
+  sudo: yes
+  roles:
+    - checkmk
+
+  handlers:
+    - name: restart_xinetd
+      command: systemctl restart xinetd
+      async: 0
+      poll: 0
