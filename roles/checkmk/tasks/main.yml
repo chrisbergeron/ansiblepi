@@ -27,7 +27,33 @@
 
 - name: TASK | Start Checkmk Agent (and enable)
   service: name=checkmk_agent state=started enabled=yes
-#  register: checkmk_agent
-#  systemd:
-#    name: checkmk_agent
-#    enabled: yes
+
+# Add host	
+# curl 'http://${omd}/${site}/check_mk/webapi.py?action=add_host&_username=${user}&_secret=${$secret}' -d 'request={\"attributes\":{\"alias\": \"Alias of ${::fqdn}\", \"tag_agent\": \"cmk-agent\", \"tag_criticality\": \"${tag_criticality}\", \"ipaddress\": \"$ipaddress\"}, \"hostname\": \"${hostname}\", \"folder\": \"${folder}\"}'"
+- name: TASK | Register host(s) with Checkmk
+	uri:
+    url: http://${omd}/${site}/check_mk/webapi.py?action=add_host&_username=${user}&_secret=${$secret}
+    method: GET
+    body: "{{ lookup('file','mesos-consul.json') }}"
+    body_format: json
+    HEADER_Content-Type: "application/json"
+
+# Discover services
+# curl 'http://${omd}/${site}/check_mk/webapi.py?action=discover_services&_username=${user}&_secret=${$secret}' -d 'request={\"hostname\": \"${hostname}\"}'"
+- name: TASK | Discover host services
+	uri:
+    url: http://${omd}/${site}/check_mk/webapi.py?action=discover_services&_username=${user}&_secret=${$secret}
+    method: GET
+    body: "{{ lookup('file','mesos-consul.json') }}"
+    body_format: json
+    HEADER_Content-Type: "application/json"
+    
+# Activate changes
+# curl 'http://${omd}/${site}/check_mk/webapi.py?action=activate_changes&_username=${user}&_secret=${$secret}'"
+- name: TASK | Activate changes in Checkmk
+	uri:
+    url: http://${omd}/${site}/check_mk/webapi.py?action=activate_changes&_username=${user}&_secret=${$secret}
+    method: GET
+    body: "{{ lookup('file','mesos-consul.json') }}"
+    body_format: json
+    HEADER_Content-Type: "application/json"
