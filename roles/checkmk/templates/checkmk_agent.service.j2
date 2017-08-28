@@ -1,0 +1,12 @@
+[Unit]
+Description=Checkmk Agent Listener
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/checkmk_agent_listener &
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+SyslogIdentifier=checkmk_agent
+
+[Install]
+WantedBy=multi-user.target

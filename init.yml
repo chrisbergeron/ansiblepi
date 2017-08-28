@@ -115,6 +115,7 @@
       file:
         path: /home/pi/.ssh
         state: directory
+        owner: pi
         mode: 0700
 
     - name: TASK | Copy ssh/config for user pi
@@ -142,8 +143,6 @@
 
     - name: TASK | Apt-get update (firstrun)
       command: "sudo apt-get update"
-      # async: 120
-      # poll: 0
       when:
         - firstrun | match("true")
         - ansible_ssh_host != 'gpserver'
@@ -155,7 +154,7 @@
         - sysupgrade | match("true")
         - ansible_ssh_host != 'gpserver'
 
-    - name: TASK | Install packages (firstrun)
+    - name: TASK | Install packages 
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
 
@@ -174,13 +173,9 @@
 
     - name: TASK | Install treesize in /usr/local/bin
       template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
-      when: firstrun | match("true")
 
     - name: TASK | Start updatedb for locate (firstrun)
-      shell: "(updatedb >/dev/null 2>&1 &)"
-      # async: 60
-      # poll: 0
-      when: firstrun | match("true")
+      shell: "updatedb >/dev/null 2>&1 &"
 
     - name: TASK | Install node.js packages with npm (firstrun)
       npm: name={{ item }} global=yes
@@ -190,7 +185,5 @@
   handlers:
     - name: reboot
       command: shutdown -r now
-      # async: 0
-      # poll: 0
       ignore_errors: true
       register: restarted

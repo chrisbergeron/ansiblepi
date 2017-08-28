@@ -1,26 +1,33 @@
 ---
-- name: TASK | Install xinetd
-  apt: 
-    name: xinetd
-    state: present 
-    update_cache: yes
+- name: TASK | Copy Checkmk Agent
+  template: src=check_mk_agent dest=/usr/bin/check_mk_agent mode=0755
 
-- name: TASK | Install CheckMK Agent
-  apt: 
-    name: check-mk-agent
-    state: present 
-    update_cache: yes
+- name: TASK | Copy Checkmk Agent Listener
+  template: 
+    src: checkmk_agent_listener
+    dest: /usr/local/bin
+    mode: 0755
 
-#- name: TASK | Install CheckMK Agent and xinetd
-  #apt: 
-  #  name: "{{ item }}"
-  #  state: present 
-  #  update_cache: yes
-  #  with_items:
-  #    - xinetd
-  #    - check-mk-agent
+- name: TASK | Create /etc/check_mk directory
+  file: path=/etc/check_mk state=directory
 
-- name: TASK | Copy CheckMK Agent config
-  template: src=check_mk dest=/etc/xinetd.d/check_mk
-  notify: restart_xinetd
+- name: TASK | Copy mrpe.cfg
+  template: 
+    src: mrpe.cfg.j2
+    dest: /etc/check_mk/mrpe.cfg
+    mode: 0755
 
+- name: TASK | Create Checkmk Agent Unit
+  template:
+    src: checkmk_agent.service.j2 
+    dest: /lib/systemd/system/checkmk_agent.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: TASK | Start Checkmk Agent (and enable)
+  service: name=checkmk_agent state=started enabled=yes
+#  register: checkmk_agent
+#  systemd:
+#    name: checkmk_agent
+#    enabled: yes
