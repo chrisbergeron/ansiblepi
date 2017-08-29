@@ -182,6 +182,10 @@
       with_items: npm_packages_to_install
       when: firstrun | match("true")
 
+    - name: TASK | Install pip httplib2 on target
+      # ansible uri module requires httplib2
+      pip: name=httplib2 extra_args="--user"
+
   handlers:
     - name: reboot
       command: shutdown -r now

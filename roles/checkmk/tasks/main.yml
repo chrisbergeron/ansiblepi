@@ -34,7 +34,7 @@
   uri:
     url: http://192.168.0.153/monitoring/check_mk/webapi.py?action=add_host&_username=grafana&_secret=UMKCXHTELTFCHEHAULOV
     method: GET
-    body: "request={\"attributes\":{\"alias\": \"Alias of ${::fqdn}\", \"tag_agent\": \"cmk-agent\", \"tag_criticality\": \"${tag_criticality}\", \"ipaddress\": \"$ipaddress\"}, \"hostname\": \"${hostname}\"}"
+    body: "request={\"attributes\":{\"alias\": \"Alias of ${::fqdn}\", \"tag_agent\": \"cmk-agent\", \"tag_criticality\": \"production\", \"ipaddress\": \"$ipaddress\"}, \"hostname\": \"${hostname}\"}"
     #, \"folder\": \"${folder}\"}'"
     body_format: json
     HEADER_Content-Type: "application/json"
