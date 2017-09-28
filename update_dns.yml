@@ -1,0 +1,17 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: pihole
+  gather_facts: yes
+  sudo: yes
+
+  tasks:
+    - name: TASK | Copy dnsmasq config for cbnet
+      template: src=templates/02-cbnet.conf.j2 dest=/etc/dnsmasq.d/02-cbnet.conf force=yes
+
+    - name: TASK | Copy updated dns file
+      template: src=templates/cbnet.local.list.j2 dest=/etc/pihole/cbnet.local.list force=yes
+
+    - name: TASK | Restart dnsmasq
+      service:
+        name: dnsmasq
+        state: restarted

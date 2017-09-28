@@ -1,0 +1,140 @@
+[production]
+
+
+[list1]
+
+
+[list2]
+
+
+[list3]
+
+
+[list4]
+
+
+[list5]
+
+
+[list6]
+
+
+[list7]
+
+
+[list_remainder]
+polycom ansible_ssh_host=polycom ansible_ssh_user=cbergeron host_key_checking=false
+harmonylink ansible_ssh_host=harmonylink ansible_ssh_user=cbergeron host_key_checking=false
+win2kpc ansible_ssh_host=win2kpc ansible_ssh_user=cbergeron host_key_checking=false
+viper ansible_ssh_host=viper ansible_ssh_user=cbergeron host_key_checking=false
+cbworkiphone ansible_ssh_host=cbworkiphone ansible_ssh_user=cbergeron host_key_checking=false
+wdmycloud ansible_ssh_host=wdmycloud
+wdmycloudex2 ansible_ssh_user=cbergeron host_key_checking=false
+ambientweathersensor ansible_ssh_host=ambientweathersensor ansible_ssh_user=cbergeron host_key_checking=false
+hpsmarttouch ansible_ssh_host=hpsmarttouch
+hpsmarttouchwifi ansible_ssh_user=cbergeron host_key_checking=false
+hpsmarttouchwifi ansible_ssh_host=hpsmarttouchwifi ansible_ssh_user=cbergeron host_key_checking=false
+winc-00-00 ansible_ssh_host=winc-00-00 ansible_ssh_user=cbergeron host_key_checking=false
+tinas-iphone ansible_ssh_host=tinas-iphone ansible_ssh_user=cbergeron host_key_checking=false
+security ansible_ssh_host=security ansible_ssh_user=cbergeron host_key_checking=false
+amazon-50f64226b ansible_ssh_host=amazon-50f64226b ansible_ssh_user=cbergeron host_key_checking=false
+diskstation ansible_ssh_host=diskstation
+diskstation2
+diskstation ansible_ssh_user=cbergeron host_key_checking=false
+nas ansible_ssh_host=nas ansible_ssh_user=cbergeron host_key_checking=false
+hdhomerun ansible_ssh_host=hdhomerun ansible_ssh_user=cbergeron host_key_checking=false
+pauls-iphone ansible_ssh_host=pauls-iphone ansible_ssh_user=cbergeron host_key_checking=false
+diskstation2 ansible_ssh_host=diskstation2 ansible_ssh_user=cbergeron host_key_checking=false
+diskstation ansible_ssh_host=diskstation
+diskstation2
+diskstation ansible_ssh_user=cbergeron host_key_checking=false
+wemo1 ansible_ssh_host=wemo1 ansible_ssh_user=cbergeron host_key_checking=false
+wemo2 ansible_ssh_host=wemo2 ansible_ssh_user=cbergeron host_key_checking=false
+wdmycloudex2 ansible_ssh_host=wdmycloudex2 ansible_ssh_user=cbergeron host_key_checking=false
+ipcamera1 ansible_ssh_host=ipcamera1 ansible_ssh_user=cbergeron host_key_checking=false
+samsungtv1 ansible_ssh_host=samsungtv1 ansible_ssh_user=cbergeron host_key_checking=false
+samsungtv2 ansible_ssh_host=samsungtv2 ansible_ssh_user=cbergeron host_key_checking=false
+hpprinter1 ansible_ssh_host=hpprinter1 ansible_ssh_user=cbergeron host_key_checking=false
+hpprinter2 ansible_ssh_host=hpprinter2 ansible_ssh_user=cbergeron host_key_checking=false
+nest-upstairs ansible_ssh_host=nest-upstairs ansible_ssh_user=cbergeron host_key_checking=false
+nest-main ansible_ssh_host=nest-main ansible_ssh_user=cbergeron host_key_checking=false
+ted ansible_ssh_host=ted ansible_ssh_user=cbergeron host_key_checking=false
+pi2-1 ansible_ssh_host=pi2-1
+pi2-1wifi ansible_ssh_user=cbergeron host_key_checking=false
+pi2-1wifi ansible_ssh_host=pi2-1wifi ansible_ssh_user=cbergeron host_key_checking=false
+gpserver ansible_ssh_host=gpserver
+gpserverwifi ansible_ssh_user=cbergeron host_key_checking=false
+gpserverwifi ansible_ssh_host=gpserverwifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-3 ansible_ssh_host=pi3-3
+pi3-3wifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-3wifi ansible_ssh_host=pi3-3wifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-4 ansible_ssh_host=pi3-4
+pi3-4wifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-4wifi ansible_ssh_host=pi3-4wifi ansible_ssh_user=cbergeron host_key_checking=false
+retropi ansible_ssh_host=retropi
+retropiwifi ansible_ssh_user=cbergeron host_key_checking=false
+retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-5 ansible_ssh_host=pi3-5
+pi3-5wifi ansible_ssh_user=cbergeron host_key_checking=false
+pi3-5wifi ansible_ssh_host=pi3-5wifi ansible_ssh_user=cbergeron host_key_checking=false
+rasplexwifi ansible_ssh_host=rasplexwifi ansible_ssh_user=cbergeron host_key_checking=false
+pihole ansible_ssh_host=pihole ansible_ssh_user=cbergeron host_key_checking=false
+pi3-7 ansible_ssh_host=pi3-7 ansible_ssh_user=cbergeron host_key_checking=false
+pi ansible_ssh_host=pi2-1
+pi2-1wifi
+pi3-3
+pi3-3wifi
+pi3-4
+pi3-4wifi
+pi3-5
+pi3-5wifi
+pihole
+pi3-7
+pi.hole
+pizero1
+pizero2
+pizero3
+pizero4
+pizero5
+pizero6
+pizero7
+pizero8
+pizero9
+pizero10
+pizero11 ansible_ssh_user=cbergeron host_key_checking=false
+pizero1 ansible_ssh_host=pizero1
+pizero10
+pizero11 ansible_ssh_user=cbergeron host_key_checking=false
+pizero2 ansible_ssh_host=pizero2 ansible_ssh_user=cbergeron host_key_checking=false
+pizero3 ansible_ssh_host=pizero3 ansible_ssh_user=cbergeron host_key_checking=false
+pizero4 ansible_ssh_host=pizero4 ansible_ssh_user=cbergeron host_key_checking=false
+pizero5 ansible_ssh_host=pizero5 ansible_ssh_user=cbergeron host_key_checking=false
+pizero6 ansible_ssh_host=pizero6 ansible_ssh_user=cbergeron host_key_checking=false
+pizero7 ansible_ssh_host=pizero7 ansible_ssh_user=cbergeron host_key_checking=false
+pizero8 ansible_ssh_host=pizero8 ansible_ssh_user=cbergeron host_key_checking=false
+pizero9 ansible_ssh_host=pizero9 ansible_ssh_user=cbergeron host_key_checking=false
+pizero10 ansible_ssh_host=pizero10 ansible_ssh_user=cbergeron host_key_checking=false
+pizero11 ansible_ssh_host=pizero11 ansible_ssh_user=cbergeron host_key_checking=false
+chris-win10b ansible_ssh_host=chris-win10b ansible_ssh_user=cbergeron host_key_checking=false
+chris-win10 ansible_ssh_host=chris-win10b
+chris-win10 ansible_ssh_user=cbergeron host_key_checking=false
+chrisiphone ansible_ssh_host=chrisiphone ansible_ssh_user=cbergeron host_key_checking=false
+chrislaptop ansible_ssh_host=chrislaptop ansible_ssh_user=cbergeron host_key_checking=false
+it-mbp-cbergeron ansible_ssh_host=it-mbp-cbergeron ansible_ssh_user=cbergeron host_key_checking=false
+chrisipad ansible_ssh_host=chrisipad ansible_ssh_user=cbergeron host_key_checking=false
+firestick1 ansible_ssh_host=firestick1 ansible_ssh_user=cbergeron host_key_checking=false
+veroiphone ansible_ssh_host=veroiphone
+veroiphonework ansible_ssh_user=cbergeron host_key_checking=false
+veroipad ansible_ssh_host=veroipad ansible_ssh_user=cbergeron host_key_checking=false
+veroiphonework ansible_ssh_host=veroiphonework ansible_ssh_user=cbergeron host_key_checking=false
+roku ansible_ssh_host=roku ansible_ssh_user=cbergeron host_key_checking=false
+connorkindle ansible_ssh_host=connorkindle ansible_ssh_user=cbergeron host_key_checking=false
+echo1 ansible_ssh_host=echo1 ansible_ssh_user=cbergeron host_key_checking=false
+echo2 ansible_ssh_host=echo2 ansible_ssh_user=cbergeron host_key_checking=false
+echo3 ansible_ssh_host=echo3 ansible_ssh_user=cbergeron host_key_checking=false
+tendawap ansible_ssh_host=tendawap ansible_ssh_user=cbergeron host_key_checking=false
+airportexpress1 ansible_ssh_host=airportexpress1 ansible_ssh_user=cbergeron host_key_checking=false
+netgear-600-1 ansible_ssh_host=netgear-600-1 ansible_ssh_user=cbergeron host_key_checking=false
+airportextreme ansible_ssh_host=airportextreme ansible_ssh_user=cbergeron host_key_checking=false
+netgear-600-2 ansible_ssh_host=netgear-600-2 ansible_ssh_user=cbergeron host_key_checking=false
+switch ansible_ssh_host=switch ansible_ssh_user=cbergeron host_key_checking=false
