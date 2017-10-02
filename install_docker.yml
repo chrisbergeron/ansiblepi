@@ -1,0 +1,15 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: no
+  sudo: yes
+
+  tasks:
+    - name: TASK | Install docker-engine
+      shell: curl -sSL https://get.docker.com | sh
+
+    - name: TASK | Add cbergeron to group 'docker'
+      user:
+        name: cbergeron
+        groups: docker
+        append: yes
