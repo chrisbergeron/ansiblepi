@@ -1,0 +1,25 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: yes
+  vars:
+    update_cache: no
+  sudo: yes
+
+  tasks:
+    - name: TASK | Apt-get update
+      command: "sudo apt-get update"
+      when:
+        - ansible_ssh_host != 'gpserver'
+
+    - name: TASK | Apt-get upgrade 
+      command: "sudo apt-get upgrade"
+      when:
+        - ansible_ssh_host != 'gpserver'
+      notify: reboot
+
+  handlers:
+    - name: reboot
+      command: shutdown -r now
+      ignore_errors: true
+      register: restarted
