@@ -7,13 +7,29 @@
   sudo: yes
 
   tasks:
+    - name: TASK | Disable pager in apt-get output (to prevent hanging)
+      lineinfile:
+        dest: /etc/apt/listchanges.conf
+        regexp: '^frontend'
+        line: 'frontend=text'
+
     - name: TASK | Apt-get update
-      command: "sudo apt-get update"
+      command: "apt-get update"
       when:
         - ansible_ssh_host != 'gpserver'
 
-    - name: TASK | Apt-get upgrade 
-      command: "sudo apt-get upgrade"
+    - name: TASK | Apt-get dist-upgrade 
+      command: "apt-get -y dist-upgrade"
+      when:
+        - ansible_ssh_host != 'gpserver'
+
+    - name: TASK | Remove unused packages
+      command: "apt-get autoremove"
+      when:
+        - ansible_ssh_host != 'gpserver'
+
+    - name: TASK | Remove old versions of packages
+      command: "apt-get autoclean"
       when:
         - ansible_ssh_host != 'gpserver'
       notify: reboot
