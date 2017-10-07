@@ -92,6 +92,9 @@
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
 
+    - name: TASK | Copy iTerm2 bash shell integration for user cbergeron
+      template: src="templates/iterm2_bash_shell_integration.j2" dest="/home/cbergeron/.iterm2_shell_integration.bash" force=yes
+
     - name: TASK | Create ssh config directory for user cbergeron
       file:
         path: /home/cbergeron/.ssh
