@@ -80,7 +80,7 @@
         name: "{{ username }}"
         comment: 'Chris Bergeron'
         shell: /bin/bash
-        groups: pi
+        #groups: pi
         password: "{{ CBPASSWORDNEW }}"
 
     - name: TASK | Copy {{ username }} sudoers file
