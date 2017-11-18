@@ -4,11 +4,10 @@
   gather_facts: yes
   vars:
     packages_to_install: [ git, automake, build-essential, 
-        ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+        ipython, mosh, python-pip, python-dev,
         vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog, toilet, libwww-perl, watchdog, nload, software-properties-common, screen
+        tcpdump, mlocate, rsyslog, toilet, nload, software-properties-common, screen
         ]
-    npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
     update_cache: no
     username: cbergeron
     firstrun: "false"
@@ -24,16 +23,6 @@
 
     - name: TASK | Update /etc/hosts
       template: src=templates/hosts.j2 dest=/etc/hosts force=yes
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update network/interfaces config so wifi starts on boot
-      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
-      when: firstrun | match("true")
-
-    - name: TASK | Put wifi config in place
-      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify:
         - reboot
       when: firstrun | match("true")
@@ -60,31 +49,15 @@
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
 
-      # Fix rsyslog bug - deletes the lines that reference xconsole
-    - name: TASK | Fix rsyslog bug
-      shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
-      when: firstrun | match("true")
-
-    - name: TASK | Update rsyslog configuration
-      template: src="templates/rsyslog.j2" dest="/etc/rsyslog.conf" mode=0400 owner=pi
-      when: firstrun | match("true")
-
-    - name: TASK | Restart rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-      when: firstrun | match("true")
-
     - name: TASK | Create user "{{ username }}"
       user:
         name: "{{ username }}"
         comment: 'Chris Bergeron'
         shell: /bin/bash
-        #groups: pi
         password: "{{ CBPASSWORDNEW }}"
 
     - name: TASK | Copy {{ username }} sudoers file
-      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
+      template: src="templates/020_{{ username }}cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
 
     - name: TASK | Copy .bash_logout for user cbergeron
       template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
@@ -114,51 +87,26 @@
     - name: TASK | Copy .bashrc for user pi
       template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
 
-    - name: TASK | Create .ssh directory for user pi
-      file:
-        path: /home/pi/.ssh
-        state: directory
-        owner: pi
-        mode: 0700
-
-    - name: TASK | Copy ssh/config for user pi
-      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
-
-    - name: TASK | Create mount directory for Pi files
-      file:
-        path: /mnt/pi
-        state: directory
-        mode: 0755
-
-    - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
-      template: src=templates/fstab.j2 dest=/etc/fstab
-      notify:
-        - reboot
-      when:
-        - firstrun | match("true")
-        - ansible_ssh_host != 'gpserver'
-
     - name: TASK | Install python-apt (firstrun)
       command: apt-get install python-apt
       register: aptget
       changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
       when: firstrun | match("true")
 
-    - name: TASK | Apt-get update (firstrun)
-      command: "sudo apt-get update"
+    - name: TASK | Yum update (firstrun)
+      command: "sudo yum update"
       when:
         - firstrun | match("true")
         - ansible_ssh_host != 'gpserver'
 
-    # this seems to hang
-    - name: TASK | Apt-get upgrade (runupgrade)
-      command: "sudo apt-get upgrade"
+    - name: TASK | Yum upgrade (runupgrade)
+      command: "sudo yum upgrade"
       when:
         - sysupgrade | match("true")
         - ansible_ssh_host != 'gpserver'
 
     - name: TASK | Install packages 
-      apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
+      yum: pkg={{ item }} state=installed update_cache={{ update_cache }}
       with_items: packages_to_install
 
     # set MOTD AFTER toilet has been installed
@@ -179,15 +127,6 @@
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "updatedb >/dev/null 2>&1 &"
-
-    - name: TASK | Install node.js packages with npm (firstrun)
-      npm: name={{ item }} global=yes
-      with_items: npm_packages_to_install
-      when: firstrun | match("true")
-
-    - name: TASK | Install pip httplib2 on target
-      # ansible uri module requires httplib2
-      pip: name=httplib2 extra_args="--user"
 
   handlers:
     - name: reboot
