@@ -104,7 +104,7 @@
         - sysupgrade | match("true")
 
     - name: TASK | Install Toilet
-    	shell: sudo yum install https://github.com/sliqua-hosting/repo/raw/master/centos/7/x86_64/toilet-0.3-el7.1.x86_64.rpm
+    	shell: "sudo yum install https://github.com/sliqua-hosting/repo/raw/master/centos/7/x86_64/toilet-0.3-el7.1.x86_64.rpm"
 
     # set MOTD AFTER toilet has been installed
     - name: TASK | Set MOTD
