@@ -35,9 +35,6 @@
 
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
-      notify:
-        - reboot
-      when: firstrun | match("true")
 
     - name: TASK | Generate locale
       locale_gen: name=en_US.UTF-8 state=present
