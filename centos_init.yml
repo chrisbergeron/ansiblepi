@@ -5,7 +5,7 @@
   vars:
     packages_to_install: [ git, python, mosh, python-pip, 
         vim, htop, iftop, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog, toilet, nload, software-properties-common, screen
+        tcpdump, mlocate, rsyslog, toilet, nload, screen
         ]
     username: cbergeron
     firstrun: "false"
