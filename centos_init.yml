@@ -107,8 +107,8 @@
     #  shell: "sudo yum install https://github.com/sliqua-hosting/repo/raw/master/centos/7/x86_64/toilet-0.3-el7.1.x86_64.rpm"
 
     # set MOTD AFTER toilet has been installed
-    - name: TASK | Set MOTD
-      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+    #- name: TASK | Set MOTD
+    #  shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
 
     - name: TASK | Install prowl API key
       template: src="files/prowl_key.txt" dest="/home/cbergeron/prowl_key.txt" mode=0600 owner=cbergeron
