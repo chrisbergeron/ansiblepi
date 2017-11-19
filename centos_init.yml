@@ -13,34 +13,28 @@
   become: yes
 
   tasks:
-    - name: TASK | Install EPEL repo.
+    - name: TASK | Install EPEL repo
       yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
         state: present
 
-    - name: TASK | Import EPEL GPG key.
+    - name: TASK | Import EPEL GPG key
       rpm_key:
         key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
         state: present
 
-    - name: Install remi repo.
+    - name: TASK | Install remi repo
       yum:
         name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
         state: present
 
-    - name: Import remi GPG key.
+    - name: TASK | Import remi GPG key
       rpm_key:
         key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
         state: present
 
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update /etc/hosts
-      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
       notify:
         - reboot
       when: firstrun | match("true")
@@ -109,9 +103,8 @@
       when:
         - sysupgrade | match("true")
 
-    - name: TASK | Install packages 
-      yum: pkg={{ item }} state=installed
-      with_items: packages_to_install
+    - name: TASK | Install Toilet
+    	shell: sudo yum install https://github.com/sliqua-hosting/repo/raw/master/centos/7/x86_64/toilet-0.3-el7.1.x86_64.rpm
 
     # set MOTD AFTER toilet has been installed
     - name: TASK | Set MOTD
@@ -128,6 +121,10 @@
 
     - name: TASK | Install treesize in /usr/local/bin
       template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
+
+    - name: TASK | Install packages 
+      yum: pkg={{ item }} state=installed
+      with_items: packages_to_install
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "updatedb >/dev/null 2>&1 &"
