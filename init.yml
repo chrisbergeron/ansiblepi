@@ -60,6 +60,7 @@
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
 
+    # Pi specific tasks
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
@@ -75,6 +76,14 @@
         state: restarted
       when: firstrun | match("true")
 
+    - name: TASK | Pi - Disable smartd daemon
+      shell: systemctl disable smartd
+    	# when: os.release | match("Raspbian")
+
+    - name: TASK | Pi - Stop smartd daemon
+      shell: systemctl disable smartd
+    # ----- end pi specific tasks -----
+
     - name: TASK | Create user "{{ username }}"
       user:
         name: "{{ username }}"
@@ -84,10 +93,10 @@
         password: "{{ CBPASSWORDNEW }}"
 
     - name: TASK | Copy {{ username }} sudoers file
-      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
+      template: src="templates/020_{{ username }}-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
 
-    - name: TASK | Copy .bash_logout for user cbergeron
-      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+    - name: TASK | Copy .bash_logout for user {{ username }}
+      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
 
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
@@ -107,36 +116,6 @@
 
     - name: TASK | Copy ssh keys for user cbergeron
       template: src="templates/authorized_keys.j2" dest="/home/cbergeron/.ssh/authorized_keys" mode=0600 owner=cbergeron
-
-    - name: TASK | Copy .bash_logout for user pi
-      template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
-
-    - name: TASK | Copy .bashrc for user pi
-      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
-
-    - name: TASK | Create .ssh directory for user pi
-      file:
-        path: /home/pi/.ssh
-        state: directory
-        owner: pi
-        mode: 0700
-
-    - name: TASK | Copy ssh/config for user pi
-      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
-
-    - name: TASK | Create mount directory for Pi files
-      file:
-        path: /mnt/pi
-        state: directory
-        mode: 0755
-
-    - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
-      template: src=templates/fstab.j2 dest=/etc/fstab
-      notify:
-        - reboot
-      when:
-        - firstrun | match("true")
-        - ansible_ssh_host != 'gpserver'
 
     - name: TASK | Install python-apt (firstrun)
       command: apt-get install python-apt

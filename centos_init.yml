@@ -4,14 +4,13 @@
   gather_facts: yes
   vars:
     packages_to_install: [ git, python, mosh, python-pip, 
-        vim, htop, iftop, dnsutils, lrzsz, jq, telnet, lsof,
+        vim, htop, iftop, lrzsz, jq, telnet, lsof,
         tcpdump, mlocate, rsyslog, toilet, nload, software-properties-common, screen
         ]
-    update_cache: no
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  sudo: yes
+  become: yes
 
   tasks:
     - name: TASK | Install EPEL repo.
