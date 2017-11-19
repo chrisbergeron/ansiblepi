@@ -22,26 +22,6 @@
         - reboot
       when: firstrun | match("true")
 
-    - name: TASK | Update /etc/hosts
-      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update network/interfaces config so wifi starts on boot
-      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
-      when: firstrun | match("true")
-
-    - name: TASK | Put wifi config in place
-      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Generate locale
-      locale_gen: name=en_US.UTF-8 state=present
-      when: firstrun | match("true")
-
     - name: TASK | Set keyboard layout to US
       template: src=templates/keyboard.j2 dest=/etc/default/keyboard
       notify:
@@ -60,7 +40,27 @@
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
 
-    # Pi specific tasks
+    # Pi specific tasks    
+    - name: TASK | Update /etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
+      notify:
+        - reboot
+      when: firstrun | match("true")
+    
+    - name: TASK | Update network/interfaces config so wifi starts on boot
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+      when: firstrun | match("true")
+
+    - name: TASK | Put wifi config in place
+      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Generate locale
+      locale_gen: name=en_US.UTF-8 state=present
+      when: firstrun | match("true")
+
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
       shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"

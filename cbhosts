@@ -4,9 +4,11 @@ pi3-04 ansible_ssh_host=pi3-04 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_P
 pi3-07 ansible_ssh_host=pi3-07 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [vms]
-ns-02 ansible_ssh_host=ns-02 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+dockerhost-01 ansible_ssh_host=dockerhost-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 gitlab-ce-01 ansible_ssh_host=gitlab-ce-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-vmcentos7-01  ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+nextcloud-01 ansible_ssh_host=nextcloud-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+ns-02 ansible_ssh_host=ns-02 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+vmcentos7-01 ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
 [assigned]
 retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
