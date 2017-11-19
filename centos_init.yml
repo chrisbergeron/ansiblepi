@@ -5,8 +5,7 @@
   vars:
     packages_to_install: [ git, python, mosh, python-pip, 
         vim, htop, iftop, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog, nload, screen
-        ]
+        tcpdump, mlocate, rsyslog, nload, screen ]
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
@@ -23,37 +22,18 @@
         key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
         state: present
 
-    - name: TASK | Install remi repo
+    - name: TASK | Install Remi repo
       yum:
         name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
         state: present
 
-    - name: TASK | Import remi GPG key
+    - name: TASK | Import Remi GPG key
       rpm_key:
         key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
         state: present
 
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
-
-    - name: TASK | Generate locale
-      locale_gen: name=en_US.UTF-8 state=present
-      when: firstrun | match("true")
-
-    - name: TASK | Set keyboard layout to US
-      template: src=templates/keyboard.j2 dest=/etc/default/keyboard
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update Timezone to Etc/UTC
-      copy:
-        content="Etc/UTC\n"
-        dest="/etc/timezone"
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
 
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
@@ -68,10 +48,10 @@
     - name: TASK | Copy {{ username }} sudoers file
       template: src="templates/020_{{ username }}-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
 
-    - name: TASK | Copy .bash_logout for user cbergeron
+    - name: TASK | Copy .bash_logout for user {{ username }}
       template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
 
-    - name: TASK | Copy .bashrc for user cbergeron
+    - name: TASK | Copy .bashrc for user {{ username }}
       template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc" force=yes
 
     - name: TASK | Copy iTerm2 bash shell integration for user {{ username }}
@@ -124,7 +104,7 @@
       with_items: packages_to_install
 
     - name: TASK | Start updatedb for locate (firstrun)
-      shell: "updatedb >/dev/null 2>&1 &"
+      shell: "/usr/bin/updatedb >/dev/null 2>&1 &"
 
   handlers:
     - name: reboot
