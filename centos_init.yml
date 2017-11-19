@@ -10,7 +10,7 @@
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  become: yes
+  sudo: yes
 
   tasks:
     - name: TASK | Install EPEL repo
