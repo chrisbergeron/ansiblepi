@@ -15,6 +15,10 @@ retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{
 pihole ansible_ssh_host=pihole ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 gpserver ansible_ssh_host=gpserver ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 
+[vms]
+ns2	ansible_ssh_host=ns2 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+vmcentos7-01  ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+
 [zeros]
 pizero1  ansible_ssh_host=pizero1 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
 pizero2  ansible_ssh_host=pizero2 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
