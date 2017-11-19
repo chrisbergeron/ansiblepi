@@ -3,9 +3,8 @@
 - hosts: all 
   gather_facts: yes
   vars:
-    packages_to_install: [ git, automake, build-essential, 
-        ipython, mosh, python-pip, python-dev,
-        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
+    packages_to_install: [ git, python, mosh, python-pip, 
+        vim, htop, iftop, dnsutils, lrzsz, jq, telnet, lsof,
         tcpdump, mlocate, rsyslog, toilet, nload, software-properties-common, screen
         ]
     update_cache: no
@@ -15,6 +14,26 @@
   sudo: yes
 
   tasks:
+    - name: TASK | Install EPEL repo.
+      yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+        state: present
+
+    - name: TASK | Import EPEL GPG key.
+      rpm_key:
+        key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+        state: present
+
+    - name: Install remi repo.
+      yum:
+        name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+        state: present
+
+    - name: Import remi GPG key.
+      rpm_key:
+        key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+        state: present
+
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
       notify:
@@ -52,61 +71,47 @@
     - name: TASK | Create user "{{ username }}"
       user:
         name: "{{ username }}"
-        comment: 'Chris Bergeron'
+        # comment: 'Chris Bergeron'
         shell: /bin/bash
         password: "{{ CBPASSWORDNEW }}"
 
     - name: TASK | Copy {{ username }} sudoers file
-      template: src="templates/020_{{ username }}cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
+      template: src="templates/020_{{ username }}-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
 
     - name: TASK | Copy .bash_logout for user cbergeron
-      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
 
     - name: TASK | Copy .bashrc for user cbergeron
-      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
+      template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc" force=yes
 
-    - name: TASK | Copy iTerm2 bash shell integration for user cbergeron
+    - name: TASK | Copy iTerm2 bash shell integration for user {{ username }}
       template: src="templates/iterm2_bash_shell_integration.j2" dest="/home/cbergeron/.iterm2_shell_integration.bash" force=yes
 
-    - name: TASK | Create ssh config directory for user cbergeron
+    - name: TASK | Create ssh config directory for user {{ username }}
       file:
-        path: /home/cbergeron/.ssh
+        path: "/home/{{ username }}/.ssh"
         state: directory
-        owner: cbergeron
+        owner: "{{ username }}"
         mode: 0700
 
-    - name: TASK | Copy ssh/config for user cbergeron
-      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
+    - name: TASK | Copy ssh/config for user {{ username }}
+      template: src="templates/ssh_config.j2" dest="/home/{{ username }}/.ssh/config" mode=0400 owner={{ username }}
 
-    - name: TASK | Copy ssh keys for user cbergeron
-      template: src="templates/authorized_keys.j2" dest="/home/cbergeron/.ssh/authorized_keys" mode=0600 owner=cbergeron
-
-    - name: TASK | Copy .bash_logout for user pi
-      template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
-
-    - name: TASK | Copy .bashrc for user pi
-      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
-
-    - name: TASK | Install python-apt (firstrun)
-      command: apt-get install python-apt
-      register: aptget
-      changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
-      when: firstrun | match("true")
+    - name: TASK | Copy ssh keys for user {{ username }}
+      template: src="templates/authorized_keys.j2" dest="/home/{{ username }}/.ssh/authorized_keys" mode=0600 owner={{ username }}
 
     - name: TASK | Yum update (firstrun)
       command: "sudo yum update"
       when:
         - firstrun | match("true")
-        - ansible_ssh_host != 'gpserver'
 
-    - name: TASK | Yum upgrade (runupgrade)
+    - name: TASK | Yum upgrade (sysupgrade)
       command: "sudo yum upgrade"
       when:
         - sysupgrade | match("true")
-        - ansible_ssh_host != 'gpserver'
 
     - name: TASK | Install packages 
-      yum: pkg={{ item }} state=installed update_cache={{ update_cache }}
+      yum: pkg={{ item }} state=installed
       with_items: packages_to_install
 
     # set MOTD AFTER toilet has been installed
