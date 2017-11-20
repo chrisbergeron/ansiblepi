@@ -45,7 +45,7 @@
       template: src=files/services.j2 dest=/etc/services
 
     - name: TASK | Disable SELinux (Centos 7)
-    	template: src=templates/selinux.j2 dest=/etc/sysconfig/selinux
+      template: src=templates/selinux.j2 dest=/etc/sysconfig/selinux
 
     - name: TASK | Create user "{{ username }}"
       user:
