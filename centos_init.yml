@@ -9,9 +9,10 @@
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  sudo: yes
+  become: true
 
   tasks:
+    # This doesn't work with older versions of ansible < 2.x
     - name: TASK | Stop and disable iptables
       systemd: 
         name: firewalld
@@ -80,12 +81,12 @@
       template: src="templates/authorized_keys.j2" dest="/home/{{ username }}/.ssh/authorized_keys" mode=0600 owner={{ username }}
 
     - name: TASK | Yum update (firstrun)
-      command: "sudo yum update"
+      command: "sudo yum -y update"
       when:
         - firstrun | match("true")
 
     - name: TASK | Yum upgrade (sysupgrade)
-      command: "sudo yum upgrade"
+      command: "sudo yum -y upgrade"
       when:
         - sysupgrade | match("true")
 
@@ -110,10 +111,12 @@
 
     - name: TASK | Install packages 
       yum: pkg={{ item }} state=installed
-      with_items: packages_to_install
+      with_items: "{{ packages_to_install }}"
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "/usr/bin/updatedb >/dev/null 2>&1 &"
+      when:
+        - firstrun | match("true")
 
   handlers:
     - name: reboot
