@@ -13,7 +13,8 @@
 
   tasks:
     - name: TASK | Stop and disable iptables
-      service: firewalld
+      systemd: 
+        name: firewalld
         state: stopped
         enabled: no
 
