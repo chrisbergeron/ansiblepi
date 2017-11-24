@@ -3,13 +3,13 @@
 - hosts: all 
   gather_facts: yes
   vars:
-    packages_to_install: [ git, python, mosh, python-pip, 
+    packages_to_install: [ nfs-utils, git, python, mosh, python-pip, 
         vim, htop, iftop, lrzsz, jq, telnet, lsof,
         tcpdump, mlocate, rsyslog, nload, screen ]
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  sudo: true
+  become: true
 
   tasks:
     # This doesn't work with older versions of ansible < 2.x
@@ -81,12 +81,12 @@
       template: src="templates/authorized_keys.j2" dest="/home/{{ username }}/.ssh/authorized_keys" mode=0600 owner={{ username }}
 
     - name: TASK | Yum update (firstrun)
-      command: "sudo yum -y update"
+      command: "yum -y update"
       when:
         - firstrun | match("true")
 
     - name: TASK | Yum upgrade (sysupgrade)
-      command: "sudo yum -y upgrade"
+      command: "yum -y upgrade"
       when:
         - sysupgrade | match("true")
 
@@ -112,6 +112,26 @@
     - name: TASK | Install packages 
       yum: pkg={{ item }} state=installed
       with_items: "{{ packages_to_install }}"
+
+    - name: TASK | Ensure /mnt/pi directory exists
+      file:
+        path: /mnt/pi
+        state: directory
+        owner: cbergeron
+        group: cbergeron
+        mode: 0777
+
+    - name: TASK | Add line to fstab for Pi nfs mount
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^nas:/volume1/Data/Pi'
+        line: 'nas:/volume1/Data/Pi  /mnt/pi   nfs      auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0'
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: TASK | Mount /mnt/pi
+      shell: "/usr/bin/mount -a"
 
     - name: TASK | Start updatedb for locate (firstrun)
       shell: "/usr/bin/updatedb >/dev/null 2>&1 &"
