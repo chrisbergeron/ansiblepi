@@ -113,9 +113,9 @@
       yum: pkg={{ item }} state=installed
       with_items: "{{ packages_to_install }}"
 
-    - name: TASK | Ensure /mnt/pi directory exists
+    - name: TASK | Ensure /mnt/data directory exists
       file:
-        path: /mnt/pi
+        path: /mnt/data
         state: directory
         owner: cbergeron
         group: cbergeron
@@ -124,13 +124,13 @@
     - name: TASK | Add line to fstab for Pi nfs mount
       lineinfile:
         path: /etc/fstab
-        regexp: '^nas:/volume1/Data/Pi'
-        line: 'nas:/volume1/Data/Pi  /mnt/pi   nfs      auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0'
+        regexp: '^nas:/volume1/Data'
+        line: 'nas:/volume1/Data  /mnt/data   nfs      auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0'
         owner: root
         group: root
         mode: 0644
 
-    - name: TASK | Mount /mnt/pi
+    - name: TASK | Mount /mnt/data
       shell: "/usr/bin/mount -a"
 
     - name: TASK | Start updatedb for locate (firstrun)
