@@ -1,31 +1,33 @@
 [unassigned]
-pi2-01 ansible_ssh_host=pi2-01 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pi3-04 ansible_ssh_host=pi3-04 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pi3-07 ansible_ssh_host=pi3-07 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pi2-01 ansible_ssh_host=pi2-01 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pi3-04 ansible_ssh_host=pi3-04 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pi3-07 ansible_ssh_host=pi3-07 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 
 [vms]
-dockerhost-01 ansible_ssh_host=dockerhost-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-elk-01 ansible_ssh_host=elk-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-gitlab-ce-01 ansible_ssh_host=gitlab-ce-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-nextcloud-01 ansible_ssh_host=nextcloud-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-ns-02 ansible_ssh_host=ns-02 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-vmcentos7-01 ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+dockerhost-01 ansible_ssh_host=dockerhost-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+elk-01 ansible_ssh_host=elk-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+gitlab-ce-01 ansible_ssh_host=gitlab-ce-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+nextcloud-01 ansible_ssh_host=nextcloud-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+ns-02 ansible_ssh_host=ns-02 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+vmcentos7-01 ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+checkmk-01 ansible_ssh_host=checkmk-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+
 
 [assigned]
-retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pihole ansible_ssh_host=pihole ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-gpserver ansible_ssh_host=gpserver ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pihole ansible_ssh_host=pihole ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+gpserver ansible_ssh_host=gpserver ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 
 [zeros]
-pizero-01 ansible_ssh_host=pizero-01 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-02 ansible_ssh_host=pizero-02 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-03 ansible_ssh_host=pizero-03 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-04 ansible_ssh_host=pizero-04 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-05 ansible_ssh_host=pizero-05 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-06 ansible_ssh_host=pizero-06 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-07 ansible_ssh_host=pizero-07 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-08 ansible_ssh_host=pizero-08 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-09 ansible_ssh_host=pizero-09 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-10 ansible_ssh_host=pizero-10 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
-pizero-11 ansible_ssh_host=pizero-11 ansible_ssh_user=pi ansible_ssh_pass="{{ PIUSER_PW }}" host_key_checking=false
+pizero-01 ansible_ssh_host=pizero-01 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-02 ansible_ssh_host=pizero-02 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-03 ansible_ssh_host=pizero-03 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-04 ansible_ssh_host=pizero-04 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-05 ansible_ssh_host=pizero-05 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-06 ansible_ssh_host=pizero-06 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-07 ansible_ssh_host=pizero-07 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-08 ansible_ssh_host=pizero-08 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-09 ansible_ssh_host=pizero-09 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-10 ansible_ssh_host=pizero-10 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pizero-11 ansible_ssh_host=pizero-11 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false

@@ -9,7 +9,7 @@
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  become: true
+  sudo: true
 
   tasks:
     # This doesn't work with older versions of ansible < 2.x
