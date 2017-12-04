@@ -1,0 +1,145 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: yes
+  vars:
+    packages_to_install: [ nfs-utils, git, python, mosh, python-pip, 
+        vim, htop, iftop, lrzsz, jq, telnet, lsof,
+        tcpdump, mlocate, rsyslog, nload, screen ]
+    username: cbergeron
+    firstrun: "false"
+    sysupgrade: "false"
+  become: true
+
+  tasks:
+    # This doesn't work with older versions of ansible < 2.x
+    - name: TASK | Stop and disable iptables
+      systemd: 
+        name: firewalld
+        state: stopped
+        enabled: no
+
+    - name: TASK | Install EPEL repo
+      yum:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+        state: present
+
+    - name: TASK | Import EPEL GPG key
+      rpm_key:
+        key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+        state: present
+
+    - name: TASK | Install Remi repo
+      yum:
+        name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+        state: present
+
+    - name: TASK | Import Remi GPG key
+      rpm_key:
+        key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+        state: present
+
+    - name: TASK | Set /etc/hostname
+      template: src=templates/hostname.j2 dest=/etc/hostname force=yes
+
+    - name: TASK | Update /etc/services file
+      template: src=files/services.j2 dest=/etc/services
+
+    - name: TASK | Disable SELinux (Centos 7)
+      template: src=templates/selinux.j2 dest=/etc/sysconfig/selinux
+
+    - name: TASK | Create user "{{ username }}"
+      user:
+        name: "{{ username }}"
+        # comment: 'Chris Bergeron'
+        shell: /bin/bash
+        password: "{{ CBPASSWORDNEW }}"
+
+    - name: TASK | Copy {{ username }} sudoers file
+      template: src="templates/020_{{ username }}-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
+
+    - name: TASK | Copy .bash_logout for user {{ username }}
+      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
+
+    - name: TASK | Copy .bashrc for user {{ username }}
+      template: src="templates/bashrc.j2" dest="/home/{{ username }}/.bashrc" force=yes
+
+    - name: TASK | Copy iTerm2 bash shell integration for user {{ username }}
+      template: src="templates/iterm2_bash_shell_integration.j2" dest="/home/cbergeron/.iterm2_shell_integration.bash" force=yes
+
+    - name: TASK | Create ssh config directory for user {{ username }}
+      file:
+        path: "/home/{{ username }}/.ssh"
+        state: directory
+        owner: "{{ username }}"
+        mode: 0700
+
+    - name: TASK | Copy ssh/config for user {{ username }}
+      template: src="templates/ssh_config.j2" dest="/home/{{ username }}/.ssh/config" mode=0400 owner={{ username }}
+
+    - name: TASK | Copy ssh keys for user {{ username }}
+      template: src="templates/authorized_keys.j2" dest="/home/{{ username }}/.ssh/authorized_keys" mode=0600 owner={{ username }}
+
+    - name: TASK | Yum update (firstrun)
+      command: "yum -y update"
+      when:
+        - firstrun | match("true")
+
+    - name: TASK | Yum upgrade (sysupgrade)
+      command: "yum -y upgrade"
+      when:
+        - sysupgrade | match("true")
+
+    #- name: TASK | Install Toilet
+    #  shell: "sudo yum install https://github.com/sliqua-hosting/repo/raw/master/centos/7/x86_64/toilet-0.3-el7.1.x86_64.rpm"
+
+    # set MOTD AFTER toilet has been installed
+    #- name: TASK | Set MOTD
+    #  shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+
+    - name: TASK | Install prowl API key
+      template: src="files/prowl_key.txt" dest="/home/cbergeron/prowl_key.txt" mode=0600 owner=cbergeron
+
+    - name: TASK | Install prowl
+      template: src="files/prowl.pl" dest="/usr/local/bin/prowl.pl" mode=0755 owner=root
+
+    - name: TASK | Install prowlnotify
+      template: src="files/prowlnotify.sh" dest="/usr/local/bin/prowlnotify" mode=0755 owner=root
+
+    - name: TASK | Install treesize in /usr/local/bin
+      template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=root
+
+    - name: TASK | Install packages 
+      yum: pkg={{ item }} state=installed
+      with_items: "{{ packages_to_install }}"
+
+    - name: TASK | Ensure /mnt/data directory exists
+      file:
+        path: /mnt/data
+        state: directory
+        owner: cbergeron
+        group: cbergeron
+        mode: 0777
+
+    - name: TASK | Add line to fstab for Pi nfs mount
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^nas:/volume1/Data'
+        line: 'nas:/volume1/Data  /mnt/data   nfs      auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0'
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: TASK | Mount /mnt/data
+      shell: "/usr/bin/mount -a"
+
+    - name: TASK | Start updatedb for locate (firstrun)
+      shell: "/usr/bin/updatedb >/dev/null 2>&1 &"
+      when:
+        - firstrun | match("true")
+
+  handlers:
+    - name: reboot
+      command: shutdown -r now
+      ignore_errors: true
+      register: restarted

@@ -1,0 +1,205 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: all 
+  gather_facts: yes
+  vars:
+    packages_to_install: [ git, automake, build-essential, 
+        ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+        vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
+        tcpdump, mlocate, rsyslog, toilet, libwww-perl, watchdog, nload, software-properties-common, screen
+        ]
+    npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
+    update_cache: no
+    username: cbergeron
+    firstrun: "false"
+    sysupgrade: "false"
+  sudo: yes
+
+  tasks:
+    - name: TASK | Set /etc/hostname
+      template: src=templates/hostname.j2 dest=/etc/hostname force=yes
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Update /etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Update network/interfaces config so wifi starts on boot
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+      when: firstrun | match("true")
+
+    - name: TASK | Put wifi config in place
+      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Generate locale
+      locale_gen: name=en_US.UTF-8 state=present
+      when: firstrun | match("true")
+
+    - name: TASK | Set keyboard layout to US
+      template: src=templates/keyboard.j2 dest=/etc/default/keyboard
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Update Timezone to Etc/UTC
+      copy:
+        content="Etc/UTC\n"
+        dest="/etc/timezone"
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+
+    - name: TASK | Update /etc/services file
+      template: src=files/services.j2 dest=/etc/services
+
+    - name: TASK | Ensure HashKnownHosts is commented out in /etc/ssh/ssh_config
+      lineinfile:
+        path: /etc/ssh/ssh_config
+        regexp: 'HashKnownHosts'
+        line: '#HashKnownHosts'
+        owner: root
+        group: root
+        mode: 0644 
+
+      # Fix rsyslog bug - deletes the lines that reference xconsole
+    - name: TASK | Fix rsyslog bug
+      shell: "sed -i '/# The named pipe \\/dev\\/xconsole/,$d' /etc/rsyslog.conf"
+      when: firstrun | match("true")
+
+    - name: TASK | Update rsyslog configuration
+      template: src="templates/rsyslog.j2" dest="/etc/rsyslog.conf" mode=0400 owner=pi
+      when: firstrun | match("true")
+
+    - name: TASK | Restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+      when: firstrun | match("true")
+
+    - name: TASK | Create user "{{ username }}"
+      user:
+        name: "{{ username }}"
+        comment: 'Chris Bergeron'
+        shell: /bin/bash
+        #groups: pi
+        password: "{{ CBPASSWORDNEW }}"
+
+    - name: TASK | Copy {{ username }} sudoers file
+      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
+
+    - name: TASK | Copy .bash_logout for user cbergeron
+      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+
+    - name: TASK | Copy .bashrc for user cbergeron
+      template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
+
+    - name: TASK | Copy iTerm2 bash shell integration for user cbergeron
+      template: src="templates/iterm2_bash_shell_integration.j2" dest="/home/cbergeron/.iterm2_shell_integration.bash" force=yes
+
+    - name: TASK | Create ssh config directory for user cbergeron
+      file:
+        path: /home/cbergeron/.ssh
+        state: directory
+        owner: cbergeron
+        mode: 0700
+
+    - name: TASK | Copy ssh/config for user cbergeron
+      template: src="templates/ssh_config.j2" dest="/home/cbergeron/.ssh/config" mode=0400 owner=cbergeron
+
+    - name: TASK | Copy ssh keys for user cbergeron
+      template: src="templates/authorized_keys.j2" dest="/home/cbergeron/.ssh/authorized_keys" mode=0600 owner=cbergeron
+
+    - name: TASK | Copy .bash_logout for user pi
+      template: src="templates/bashrc.j2" dest="/home/pi/.bashrc"
+
+    - name: TASK | Copy .bashrc for user pi
+      template: src="templates/bash_logout.j2" dest="/home/pi/.bash_logout" force=yes
+
+    - name: TASK | Create .ssh directory for user pi
+      file:
+        path: /home/pi/.ssh
+        state: directory
+        owner: pi
+        mode: 0700
+
+    - name: TASK | Copy ssh/config for user pi
+      template: src="templates/ssh_config.j2" dest="/home/pi/.ssh/config" mode=0400 owner=pi
+
+    - name: TASK | Create mount directory for Pi files
+      file:
+        path: /mnt/pi
+        state: directory
+        mode: 0755
+
+    - name: TASK | Update fstab to mount NAS volume to '/mnt/pi'
+      template: src=templates/fstab.j2 dest=/etc/fstab
+      notify:
+        - reboot
+      when:
+        - firstrun | match("true")
+        - ansible_ssh_host != 'gpserver'
+
+    - name: TASK | Install python-apt (firstrun)
+      command: apt-get install python-apt
+      register: aptget
+      changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
+      when: firstrun | match("true")
+
+    - name: TASK | Apt-get update (firstrun)
+      command: "sudo apt-get update"
+      when:
+        - firstrun | match("true")
+        - ansible_ssh_host != 'gpserver'
+
+    # this seems to hang
+    - name: TASK | Apt-get upgrade (runupgrade)
+      command: "sudo apt-get upgrade"
+      when:
+        - sysupgrade | match("true")
+        - ansible_ssh_host != 'gpserver'
+
+    - name: TASK | Install packages 
+      apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
+      with_items: packages_to_install
+
+    # set MOTD AFTER toilet has been installed
+    - name: TASK | Set MOTD
+      shell: "(/usr/bin/toilet -f mono12 -F metal `cat /etc/hostname` > /etc/motd)"
+
+    - name: TASK | Install prowl API key
+      template: src="files/prowl_key.txt" dest="/home/cbergeron/prowl_key.txt" mode=0600 owner=cbergeron
+
+    - name: TASK | Install prowl
+      template: src="files/prowl.pl" dest="/usr/local/bin/prowl.pl" mode=0755 owner=cbergeron
+
+    - name: TASK | Install prowlnotify
+      template: src="files/prowlnotify.sh" dest="/usr/local/bin/prowlnotify" mode=0755 owner=cbergeron
+
+    - name: TASK | Install treesize in /usr/local/bin
+      template: src="files/treesize.j2" dest="/usr/local/bin/treesize" mode=0755 owner=pi
+
+    - name: TASK | Start updatedb for locate (firstrun)
+      shell: "updatedb >/dev/null 2>&1 &"
+
+    - name: TASK | Install node.js packages with npm (firstrun)
+      npm: name={{ item }} global=yes
+      with_items: npm_packages_to_install
+      when: firstrun | match("true")
+
+    - name: TASK | Install pip httplib2 on target
+      # ansible uri module requires httplib2
+      pip: name=httplib2 extra_args="--user"
+
+  handlers:
+    - name: reboot
+      command: shutdown -r now
+      ignore_errors: true
+      register: restarted
