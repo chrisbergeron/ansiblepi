@@ -3,7 +3,7 @@
 - hosts: all 
   gather_facts: yes
   vars:
-    packages_to_install: [ git, automake, build-essential, 
+    packages_to_install: [ nfs-common, git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, htop, ranger, iftop, dnsutils, lrzsz, jq, telnet, lsof,
         tcpdump, mlocate, rsyslog, toilet, libwww-perl, watchdog, nload, software-properties-common, screen
@@ -13,33 +13,13 @@
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
-  sudo: yes
+  become: yes
 
   tasks:
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
       notify:
         - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update /etc/hosts
-      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Update network/interfaces config so wifi starts on boot
-      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
-      when: firstrun | match("true")
-
-    - name: TASK | Put wifi config in place
-      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
-      notify:
-        - reboot
-      when: firstrun | match("true")
-
-    - name: TASK | Generate locale
-      locale_gen: name=en_US.UTF-8 state=present
       when: firstrun | match("true")
 
     - name: TASK | Set keyboard layout to US
@@ -60,6 +40,27 @@
     - name: TASK | Update /etc/services file
       template: src=files/services.j2 dest=/etc/services
 
+    # Pi specific tasks    
+    - name: TASK | Update /etc/hosts
+      template: src=templates/hosts.j2 dest=/etc/hosts force=yes
+      notify:
+        - reboot
+      when: firstrun | match("true")
+    
+    - name: TASK | Update network/interfaces config so wifi starts on boot
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+      when: firstrun | match("true")
+
+    - name: TASK | Put wifi config in place
+      template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
+      notify:
+        - reboot
+      when: firstrun | match("true")
+
+    - name: TASK | Generate locale
+      locale_gen: name=en_US.UTF-8 state=present
+      when: firstrun | match("true")
+
     - name: TASK | Ensure HashKnownHosts is commented out in /etc/ssh/ssh_config
       lineinfile:
         path: /etc/ssh/ssh_config
@@ -67,7 +68,7 @@
         line: '#HashKnownHosts'
         owner: root
         group: root
-        mode: 0644 
+        mode: 0644
 
       # Fix rsyslog bug - deletes the lines that reference xconsole
     - name: TASK | Fix rsyslog bug
@@ -84,6 +85,16 @@
         state: restarted
       when: firstrun | match("true")
 
+    - name: TASK | Pi - Disable smartd daemon
+      shell: systemctl disable smartd
+      when: firstrun | match("true")
+      # when: os.release | match("Raspbian")
+
+    - name: TASK | Pi - Stop smartd daemon
+      shell: systemctl disable smartd
+      when: firstrun | match("true")
+      # ----- end pi specific tasks -----
+
     - name: TASK | Create user "{{ username }}"
       user:
         name: "{{ username }}"
@@ -93,10 +104,10 @@
         password: "{{ CBPASSWORDNEW }}"
 
     - name: TASK | Copy {{ username }} sudoers file
-      template: src="templates/020_cbergeron-nopasswd.j2" dest="/etc/sudoers.d/020_cbergeron-nopasswd" mode=0440
+      template: src="templates/020_{{ username }}-nopasswd.j2" dest="/etc/sudoers.d/020_{{ username }}-nopasswd" mode=0440
 
-    - name: TASK | Copy .bash_logout for user cbergeron
-      template: src="templates/bash_logout.j2" dest="/home/cbergeron/.bash_logout"
+    - name: TASK | Copy .bash_logout for user {{ username }}
+      template: src="templates/bash_logout.j2" dest="/home/{{ username }}/.bash_logout"
 
     - name: TASK | Copy .bashrc for user cbergeron
       template: src="templates/bashrc.j2" dest="/home/cbergeron/.bashrc" force=yes
@@ -168,7 +179,7 @@
 
     - name: TASK | Install packages 
       apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
-      with_items: packages_to_install
+      with_items: "{{ packages_to_install }}"
 
     # set MOTD AFTER toilet has been installed
     - name: TASK | Set MOTD
@@ -197,6 +208,26 @@
     - name: TASK | Install pip httplib2 on target
       # ansible uri module requires httplib2
       pip: name=httplib2 extra_args="--user"
+
+    - name: TASK | Ensure /mnt/data directory exists
+      file:
+        path: /mnt/data
+        state: directory
+        owner: cbergeron
+        group: cbergeron
+        mode: 0775
+
+    - name: TASK | Add line to fstab for Data nfs mount
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^nas:/volume1/Data'
+        line: 'nas:/volume1/Data  /mnt/data   nfs      auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0'
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: TASK | Mount /mnt/data
+      shell: "/bin/mount -a"
 
   handlers:
     - name: reboot

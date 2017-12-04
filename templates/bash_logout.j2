@@ -8,10 +8,10 @@ if [ "$SHLVL" = 1 ]; then
 fi
 
 # append to our global history file
-if mount | grep /mnt/pi > /dev/null; then
+if mount | grep /mnt/data > /dev/null; then
     echo "Appending to masterhistory.txt...";
-    echo "************* START - `hostname` - $SSH_TTY - `date` *************" >> /mnt/pi/masterhistory.txt
-    (history >> /mnt/pi/masterhistory.txt && echo "************* END   - `hostname` - $SSH_TTY - `date` *************" >> /mnt/pi/masterhistory.txt) &
+    echo "************* START - `hostname` - $SSH_TTY - `date` *************" >> /mnt/data/masterhistory.txt
+    (history >> /mnt/data/masterhistory.txt && echo "************* END   - `hostname` - $SSH_TTY - `date` *************" >> /mnt/data/masterhistory.txt) &
 else
     echo "No mount.  Didn't append to masterhistory.txt.";
 fi

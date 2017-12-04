@@ -119,7 +119,7 @@
         state: directory
         owner: cbergeron
         group: cbergeron
-        mode: 0777
+        mode: 0775
 
     - name: TASK | Add line to fstab for Pi nfs mount
       lineinfile:
