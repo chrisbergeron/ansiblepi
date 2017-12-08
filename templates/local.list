@@ -1,6 +1,5 @@
 # Chris Local Network
-# {{ ansible_managed }}
-/home/cbergeron/ansiblepi/templates/cbnet.local.list.j2 modified on 2017-09-28 03:40:28 by cbergeron on gpserver
+{{ ansible_managed }}
 192.168.0.1 pfsense-01
 192.168.0.14 polycom
 192.168.0.15 harmonylink
