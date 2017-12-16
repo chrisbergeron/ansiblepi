@@ -17,7 +17,7 @@ vmcentos7-01 ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ss
 [assigned]
 retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 retropiwifi ansible_ssh_host=retropiwifi ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
-pihole ansible_ssh_host=pihole ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+ns-01 ansible_ssh_host=ns-01 ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 gpserver ansible_ssh_host=gpserver ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 
 [zeros]
