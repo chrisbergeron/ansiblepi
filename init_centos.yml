@@ -127,6 +127,9 @@
     - name: TASK | Copy Telegraf config
       template: src="templates/telegraf.conf.j2" dest="/etc/telegraf/telegraf.conf" mode=0644 owner=root
 
+    - name: TASK | Copy Telegraf environment default (for HOSTNAME var)
+      template: src="templates/etc_default_telegraf.j2" dest="/etc/default/telegraf" mode=0644 owner=root
+
     - name: TASK | Start Telegraf
       systemd: 
         name: telegraf
