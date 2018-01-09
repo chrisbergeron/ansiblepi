@@ -1,7 +1,7 @@
 [unassigned]
 pi2-01 ansible_ssh_host=pi2-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 pi3-04 ansible_ssh_host=pi3-04 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
-pi3-3 ansible_ssh_host=pi3-3 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+pi3-3wifi ansible_ssh_host=pi3-3wifi ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 pi3-6 ansible_ssh_host=pi3-6 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 
 [vms]
@@ -13,7 +13,8 @@ gitlab-ce-01 ansible_ssh_host=gitlab-ce-01 ansible_ssh_user=cbergeron ansible_ss
 homeassistant-01 ansible_ssh_host=homeassistant-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 nextcloud-01 ansible_ssh_host=nextcloud-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
 ns-02 ansible_ssh_host=ns-02 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
-vmcentos7-01 ansible_ssh_host=vmcentos7-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false
+gpserver-01 ansible_ssh_host=gpserver-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=falses
+photoserver-01 ansible_ssh_host=photoserver-01 ansible_ssh_user=cbergeron ansible_ssh_pass="{{ USER_PW }}" host_key_checking=falses
 
 [assigned]
 retropi ansible_ssh_host=retropi ansible_ssh_user=pi ansible_ssh_pass="{{ USER_PW }}" host_key_checking=false

@@ -38,6 +38,7 @@
     #, \"folder\": \"${folder}\"}'"
     body_format: json
     HEADER_Content-Type: "application/json"
+  when: registeragent | match("true")
 
 # Discover services
 # curl 'http://${omd}/${site}/check_mk/webapi.py?action=discover_services&_username=${user}&_secret=${$secret}' -d 'request={\"hostname\": \"${hostname}\"}'"
@@ -48,6 +49,7 @@
     body: "request={\"hostname\": \"${hostname}\"}"
     body_format: json
     HEADER_Content-Type: "application/json"
+  when: registeragent | match("true")
     
 # Activate changes
 # curl 'http://${omd}/${site}/check_mk/webapi.py?action=activate_changes&_username=${user}&_secret=${$secret}'"
@@ -58,3 +60,4 @@
     #body: "{{ lookup('file','mesos-consul.json') }}"
     #body_format: json
     HEADER_Content-Type: "application/json"
+  when: registeragent | match("true")

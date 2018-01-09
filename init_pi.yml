@@ -13,6 +13,9 @@
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
+    registeragent: "false"             # register host(s) with checkmk
+  roles:
+    - checkmk
   become: yes
 
   tasks:
@@ -65,7 +68,7 @@
       lineinfile:
         path: /etc/ssh/ssh_config
         regexp: 'HashKnownHosts'
-        line: '#HashKnownHosts'
+        line: '#   HashKnownHosts'
         owner: root
         group: root
         mode: 0644

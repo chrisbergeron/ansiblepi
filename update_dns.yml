@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: pihole
+- hosts: ns-01, ns-02
   gather_facts: yes
   sudo: yes
 

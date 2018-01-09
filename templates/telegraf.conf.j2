@@ -1,0 +1,55 @@
+# {{ ansible_managed }}
+[global_tags]
+  # dc = "us-east-1" # will tag all metrics with dc=us-east-1
+  # rack = "1a"
+  ## Environment variables can be used as tags, and throughout the config file
+  # user = "$USER"
+[agent]
+  interval = "10s"
+  round_interval = true
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  collection_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "0s"
+  precision = ""
+  debug = false
+  quiet = false
+  logfile = ""
+  hostname = "$HOSTNAME"
+
+  omit_hostname = false
+[[outputs.influxdb]]
+  urls = ["http://192.168.0.158:8086"] # required
+  database = "telegraf" # required
+  retention_policy = ""
+  write_consistency = "any"
+  timeout = "5s"
+  # username = "telegraf"
+  # password = "metricsmetricsmetricsmetrics"
+[[inputs.cpu]]
+  percpu = true
+  totalcpu = true
+  collect_cpu_time = false
+  report_active = false
+[[inputs.disk]]
+
+  ignore_fs = ["tmpfs", "devtmpfs", "devfs"]
+[[inputs.diskio]]
+  devices = ["sda", "sdb"]
+[[inputs.kernel]]
+  # no configuration
+[[inputs.mem]]
+  # no configuration
+[[inputs.processes]]
+  # no configuration
+[[inputs.swap]]
+  # no configuration
+[[inputs.system]]
+  # no configuration
+[[inputs.internal]]
+  collect_memstats = true
+[[inputs.net]]
+  # interfaces = ["eth0"]
+[[inputs.netstat]]
+  # no configuration

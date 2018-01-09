@@ -5,10 +5,13 @@
   vars:
     packages_to_install: [ nfs-utils, git, python, mosh, python-pip, 
         vim, htop, iftop, lrzsz, jq, telnet, lsof,
-        tcpdump, mlocate, rsyslog, nload, screen ]
+        tcpdump, mlocate, rsyslog, tree, nload, screen ]
     username: cbergeron
     firstrun: "false"
     sysupgrade: "false"
+    registeragent: "false"             # register host(s) with checkmk
+  roles:
+    - checkmk
   become: true
 
   tasks:
@@ -33,11 +36,16 @@
       yum:
         name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
         state: present
+      ignore_errors: yes
 
     - name: TASK | Import Remi GPG key
       rpm_key:
         key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
         state: present
+      ignore_errors: yes
+
+    - name: TASK | Copy Influxdata repo (for Telegraf)
+      template: src=templates/influxdb.repo.j2 dest=/etc/yum.repos.d/influxdata.repo force=yes
 
     - name: TASK | Set /etc/hostname
       template: src=templates/hostname.j2 dest=/etc/hostname force=yes
@@ -112,6 +120,18 @@
     - name: TASK | Install packages 
       yum: pkg={{ item }} state=installed
       with_items: "{{ packages_to_install }}"
+
+    - name: TASK | Install Telegraf
+      yum: pkg="telegraf"
+
+    - name: TASK | Copy Telegraf config
+      template: src="templates/telegraf.conf.j2" dest="/etc/telegraf/telegraf.conf" mode=0644 owner=root
+
+    - name: TASK | Start Telegraf
+      systemd: 
+        name: telegraf
+        state: restarted
+        enabled: yes
 
     - name: TASK | Ensure /mnt/data directory exists
       file:
